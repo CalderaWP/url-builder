@@ -17,7 +17,7 @@
 		{{#each segment}}
 		<span class="caldera-easy-rewrites-rule-segment">
 			<input type="hidden" name="rewrite[{{../_id}}][segment][{{_id}}][_id]" value="{{_id}}">
-			<input type="text" name="rewrite[{{../_id}}][segment][{{_id}}][path]" value="{{path}}" data-format="key">
+			<input type="text" name="rewrite[{{../_id}}][segment][{{_id}}][path]" value="{{path}}" data-format="key" class="required">
 			<button style="display: inline; font-size: 17px; padding: 0px 5px; border-radius: 0px 4px 4px 0px; margin: 1px 2px 0px -6px;" type="button" class="button" data-remove-parent=".caldera-easy-rewrites-rule-segment">&times;</button>
 			<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> 
 		</span>
