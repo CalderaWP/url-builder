@@ -32,6 +32,7 @@ define('CEW_VER',  '0.0.1' );
 
 // load internals
 require_once( CEW_PATH . '/classes/caldera-easy-rewrites.php' );
+require_once( CEW_PATH . 'classes/magic-slugs.php' );
 require_once( CEW_PATH . '/classes/options.php' );
 require_once( CEW_PATH . 'includes/settings.php' );
 

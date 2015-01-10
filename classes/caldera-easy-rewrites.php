@@ -5,7 +5,7 @@
  * @package   Caldera_Easy_Rewrites
  * @author    CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
- * @link
+ * @link      
  * @copyright 2014 CalderaWP <david@digilab.co.za>
  */
 
@@ -31,36 +31,34 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
-	 * @since 0.1.0
 	 */
 	private function __construct() {
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-		// setup rewrite rules
+		/// setup rewrite rules
 		add_action( 'init', array( $this, 'define_rewrites' ), 100 );
-		
+
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
-		if ( is_admin() ) {
-			// Load admin style sheet and JavaScript.
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_stylescripts' ) );
-		}
+		// Load admin style sheet and JavaScript.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_stylescripts' ) );
 
 	}
 
 
 	/**
-	 * Define the rewrites.
+	 * Return an instance of this class.
 	 *
-	 * @since 0.1.0
+	 *
+	 * @return    object    A single instance of this class.
 	 */
 	public static function define_rewrites(){
+		//get global post
+		//@todo figure out how to get an actual post object here.
 		global $post;
-
-		require_once( CEW_PATH . '/classes/magic-slugs.php' );
 
 		//flush_rewrite_rules();
 		$rules = get_option( '_caldera_easy_rewrites' );
@@ -73,17 +71,22 @@ class Caldera_Easy_Rewrites {
 
 
 		foreach( $rules['rewrite'] as $rule ){
+			$new_rule_path = array();
+			$content_type = $rule[ 'content_type' ];
 
-
-			$new_rule_path = array( $rule['slug'] );
+			$new_rule_path[] = Caldera_Easy_Rewrites_Magic_Slug::maybe_do_magic_slug( $rule['slug'], 0, $content_type, true, $post );
 			if( !empty( $rule['segment'] ) ){
-				foreach( $rule['segment'] as $segment_number => $segment ){
-					$segment = Caldera_Easy_Rewrites_Magic_Slug::maybe_do_magic_slug( $segment[ 'path' ], $segment_number, $rule[ 'content_type' ], true, $post );
-					$new_rule_path[] = $segment;
+				$i = 1;
+				foreach( $rule['segment'] as $segment ){
+					if ( isset( $segment[ 'path' ] ) ) {
+						$new_rule_path[] = Caldera_Easy_Rewrites_Magic_Slug::maybe_do_magic_slug( $segment['path'], $i, $content_type, true, $post );
+					}
+
+					$i++;
 				}
 			}
 
-			$new_rule = implode( '/', $new_rule_path );
+			$new_rule = implode( '/', urlencode_deep( $new_rule_path ) );
 
 
 			foreach( $wp_rewrite->extra_rules_top as $rewrite_rule=>$rule_struct ){
@@ -95,7 +98,6 @@ class Caldera_Easy_Rewrites {
 
 				}
 			}
-
 			// permalinks
 			$wp_rewrite->extra_permastructs[$rules['content_types'][$rule['content_type']]['slug']]['struct'] = '/' . $new_rule . substr( $wp_rewrite->extra_permastructs[$rules['content_types'][$rule['content_type']]['slug']]['struct'], ( strlen( $rules['content_types'][$rule['content_type']]['slug'] ) + 1 ) );
 
@@ -107,7 +109,6 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Return an instance of this class.
 	 *
-	 * @since 0.1.0
 	 *
 	 * @return    object    A single instance of this class.
 	 */
@@ -124,7 +125,6 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Load the plugin text domain for translation.
 	 *
-	 * @since 0.1.0
 	 */
 	public function load_plugin_textdomain() {
 
@@ -135,7 +135,8 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Register and enqueue admin-specific style sheet.
 	 *
-	 * @since 0.1.0
+	 *
+	 * @return    null
 	 */
 	public function enqueue_admin_stylescripts() {
 
