@@ -5,7 +5,7 @@
  * @package   Caldera_Easy_Rewrites
  * @author    CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
- * @link      
+ * @link
  * @copyright 2014 CalderaWP <david@digilab.co.za>
  */
 
@@ -31,6 +31,7 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
+	 * @since 0.1.0
 	 */
 	private function __construct() {
 
@@ -50,10 +51,9 @@ class Caldera_Easy_Rewrites {
 
 
 	/**
-	 * Return an instance of this class.
+	 * Define the rewrites.
 	 *
-	 *
-	 * @return    object    A single instance of this class.
+	 * @since 0.1.0
 	 */
 	public static function define_rewrites(){
 		global $post;
@@ -104,6 +104,7 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Return an instance of this class.
 	 *
+	 * @since 0.1.0
 	 *
 	 * @return    object    A single instance of this class.
 	 */
@@ -120,6 +121,7 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Load the plugin text domain for translation.
 	 *
+	 * @since 0.1.0
 	 */
 	public function load_plugin_textdomain() {
 
@@ -130,8 +132,7 @@ class Caldera_Easy_Rewrites {
 	/**
 	 * Register and enqueue admin-specific style sheet.
 	 *
-	 *
-	 * @return    null
+	 * @since 0.1.0
 	 */
 	public function enqueue_admin_stylescripts() {
 
