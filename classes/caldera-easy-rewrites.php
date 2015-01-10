@@ -38,14 +38,18 @@ class Caldera_Easy_Rewrites {
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-		/// setup rewrite rules
-		add_action( 'init', array( $this, 'define_rewrites' ), 100 );
+		if ( ! is_admin() ) {
+			// setup rewrite rules
+			add_action( 'init', array( $this, 'define_rewrites' ), 100 );
+		}
 
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
-		// Load admin style sheet and JavaScript.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_stylescripts' ) );
+		if ( is_admin() ) {
+			// Load admin style sheet and JavaScript.
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_stylescripts' ) );
+		}
 
 	}
 
