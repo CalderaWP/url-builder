@@ -56,6 +56,9 @@ class Caldera_Easy_Rewrites {
 	 * @return    object    A single instance of this class.
 	 */
 	public static function define_rewrites(){
+		global $post;
+
+		require_once( CEW_PATH . '/classes/magic-slugs.php' );
 
 		//flush_rewrite_rules();
 		$rules = get_option( '_caldera_easy_rewrites' );
@@ -65,21 +68,20 @@ class Caldera_Easy_Rewrites {
 		}
 		// start working on em.
 		global $wp_rewrite;
-		//var_dump( $wp_rewrite );
-		//die;
+
 
 		foreach( $rules['rewrite'] as $rule ){
-			//var_dump( $rule );
+
 
 			$new_rule_path = array( $rule['slug'] );
 			if( !empty( $rule['segment'] ) ){
-				foreach( $rule['segment'] as $segment ){
-					$new_rule_path[] = $segment['path'];
+				foreach( $rule['segment'] as $segment_number => $segment ){
+					$segment = Caldera_Easy_Rewrites_Magic_Slug::maybe_do_magic_slug( $segment[ 'path' ], $segment_number, $rule[ 'content_type' ], true, $post );
+					$new_rule_path[] = $segment;
 				}
 			}
 			$new_rule = implode( '/', $new_rule_path );
-			//var_dump( $new_rule );
-			//extra_rules_top
+
 
 			foreach( $wp_rewrite->extra_rules_top as $rewrite_rule=>$rule_struct ){
 				if( substr( $rewrite_rule, 0, strlen( $rules['content_types'][$rule['content_type']]['slug'] ) ) === $rules['content_types'][$rule['content_type']]['slug'] ){
@@ -87,20 +89,15 @@ class Caldera_Easy_Rewrites {
 					$rewrite_rule = $new_rule . substr( $rewrite_rule, strlen( $rules['content_types'][$rule['content_type']]['slug'] ) );
 
 					$wp_rewrite->extra_rules_top[$rewrite_rule] = $rule_struct;					
-					//echo $rewrite_rule.'<br>';
-					//die;
-					//var_dump( $rules['content_types'][$rule['content_type']]['slug'] );
-					//die;
+
 				}
 			}
+
 			// permalinks
 			$wp_rewrite->extra_permastructs[$rules['content_types'][$rule['content_type']]['slug']]['struct'] = '/' . $new_rule . substr( $wp_rewrite->extra_permastructs[$rules['content_types'][$rule['content_type']]['slug']]['struct'], ( strlen( $rules['content_types'][$rule['content_type']]['slug'] ) + 1 ) );
-			//var_dump( $wp_rewrite );
-			//die;
-		}
-		//add_rewrite_tag('%selldock_action%', '(selldock_action)');
 
-		//add_rewrite_rule('^package/detail/?', 'index.php?selldock_action=selldock_package_detail', 'top');
+		}
+
 
 	}
 

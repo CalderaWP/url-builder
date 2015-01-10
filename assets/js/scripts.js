@@ -303,14 +303,14 @@ jQuery( function($){
 		var input = $(this);
 
 		if( input.data('master') && input.prop('required') && this.value.length <= 0 && e.type === "change" ){
-			this.value = $(input.data('master')).val().replace(/[^a-z0-9_]/gi, '-').toLowerCase();
+			this.value = $(input.data('master')).val().replace(/[^a-z0-9_%]/gi, '-').toLowerCase();
 			if( this.value.length ){
 				input.trigger('change');
 			}
 			return;
 		}
 
-		this.value = this.value.replace(/[^a-z0-9_]/gi, '-').toLowerCase();
+		this.value = this.value.replace(/[^a-z0-9_%.]/gi, '-').toLowerCase();
 	});
 		
 	// bind label update
