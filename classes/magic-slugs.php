@@ -30,10 +30,10 @@ class Caldera_Easy_Rewrites_Magic_Slug {
 	 */
 	public static function validate_magic_slug( $segment ) {
 		switch ( $segment ) {
-			case  ( strpos( '%', $segment ) && ! strpos( '%%', $segment ) && self::is_allowed_traversal( $segment )  ) :
+			case  0 === strpos( $segment, '%' ) && false === strpos( $segment, '@'  ) && self::is_allowed_traversal( self::strip_tags_on( $segment ) )   :
 				return 'traversal';
 				break;
-			case( ! strpos( '%', $segment ) &&  strpos( '%%', $segment ) && function_exists( $segment ) ) :
+			case  0 ===  strpos($segment, '@'  ) && false === strpos( $segment, '%' ) && function_exists( self::strip_tags_on( $segment ) )  :
 				return 'callback';
 				break;
 			default :
@@ -41,6 +41,21 @@ class Caldera_Easy_Rewrites_Magic_Slug {
 				break;
 		}
 
+	}
+
+	/**
+	 * Strip illegal characters from segments
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param string $segment
+	 *
+	 * @return string
+	 */
+	protected static function strip_tags_on( $segment ) {
+		$segment = str_replace( array( '%', '@'), '', $segment );
+
+		return $segment;
 	}
 
 	/**
@@ -57,15 +72,16 @@ class Caldera_Easy_Rewrites_Magic_Slug {
 	 * @return bool|mixed|null|void
 	 */
 	public static function maybe_do_magic_slug( $segment, $segment_number, $content_type, $single, $post ) {
-		if ( strpos( '%', $segment ) ) {
+
+		if ( 0 === strpos( $segment, '%' )  || 0 === strpos( $segment, '@' ) ) {
 			$type = self::validate_magic_slug( $segment );
 			if ( $type ) {
 				switch( $type ) {
 					case $type == 'traversal' :
-						$segment = self::traversal( $segment, $segment_number, $post );
+						$segment = self::traversal( self::strip_tags_on( $segment ), $segment_number, $post );
 						break;
 					case $type == 'callback' :
-						$segment = self::callback( $segment, $segment_number, $content_type, $single );
+						$segment = self::callback( self::strip_tags_on( $segment ), $segment_number, $content_type, $single );
 						break;
 					default :
 						$segment = null;
@@ -74,6 +90,7 @@ class Caldera_Easy_Rewrites_Magic_Slug {
 
 				if ( is_string( $segment ) ) {
 					return $segment;
+
 				}
 
 			}else {
