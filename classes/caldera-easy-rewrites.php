@@ -38,11 +38,9 @@ class Caldera_Easy_Rewrites {
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
-		if ( ! is_admin() ) {
-			// setup rewrite rules
-			add_action( 'init', array( $this, 'define_rewrites' ), 100 );
-		}
-
+		// setup rewrite rules
+		add_action( 'init', array( $this, 'define_rewrites' ), 100 );
+		
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
 
@@ -84,6 +82,7 @@ class Caldera_Easy_Rewrites {
 					$new_rule_path[] = $segment;
 				}
 			}
+
 			$new_rule = implode( '/', $new_rule_path );
 
 
