@@ -1,0 +1,5 @@
+Plugin Name -- Caldera Easy Rewrites
+Text domain -- caldera-easy-rewrites
+Function prefix -- cer
+Root namespace -- n/a
+Class Prefix -- Caldera_Easy_Rewrites
