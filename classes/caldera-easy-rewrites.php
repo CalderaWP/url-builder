@@ -28,6 +28,12 @@ class Caldera_Easy_Rewrites {
 	 * @var      string
 	 */
 	protected $plugin_screen_hook_suffix = null;
+	
+	/**
+	 * @var      array
+	 */
+	protected $rule_structs = null;
+
 	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
@@ -46,61 +52,129 @@ class Caldera_Easy_Rewrites {
 		// Load admin style sheet and JavaScript.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_stylescripts' ) );
 
+		// filter permalinks.
+		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 2 );
 	}
 
+	/**
+	 * Return a new structured permalink.
+	 *
+	 * @param string	$post_link	current post url link
+	 * @param int 		$post_id	current post ID
+	 *
+	 * @return    string    url permalink
+	 */
+	public function create_permalink( $post_link, $post_id ){
 
+		global $wp_query;
+		
+		$post = get_post( $post_id );
+
+		if ( is_wp_error($post) || !isset( $this->rule_structs[$post->post_type] ) || empty($post->post_name) ){
+			return $post_link;
+		}
+
+		$new_link = array();
+
+		foreach( $this->rule_structs[$post->post_type] as $path ){
+			if( is_array( $path ) ){
+				// is this a taxonomy?
+				if( !empty( $path['taxonomy'] ) ){
+
+					// determin if its in an archive page already.
+					if( !empty( $wp_query->query[$path['taxonomy']] ) ){
+						$new_link[] = $wp_query->query[$path['taxonomy']];
+					}else{
+
+						$terms = get_the_terms( $post->ID, $path['taxonomy'] );
+
+						if( is_wp_error( $terms ) || empty( $terms ) ) {
+							$new_link[] = __( 'uncategorised', 'caldera-easy-rewrites' );
+						}else {
+							$term_obj = array_pop( $terms );
+							$new_link[] = $term_obj->slug;
+						}
+					}
+
+				}else{
+					// need a handler
+				}
+			}else{
+				$new_link[] = $path;
+			}
+		}
+
+		// add name
+		$new_link[] = $post->post_name;
+
+		return home_url(user_trailingslashit( implode( '/', $new_link ) ) );
+	}
 	/**
 	 * Return an instance of this class.
 	 *
 	 *
 	 * @return    object    A single instance of this class.
 	 */
-	public static function define_rewrites(){
-		//get global post
-		//@todo figure out how to get an actual post object here.
-		global $post;
+	public function define_rewrites(){
 
-		//flush_rewrite_rules();
+		// load up the rules
 		$rules = get_option( '_caldera_easy_rewrites' );
 
 		if( empty( $rules['rewrite'] ) ){
 			return;
 		}
 		// start working on em.
-		global $wp_rewrite;
+		foreach( $rules['rewrite'] as $rule_id=>$rule ){		
+			// structs
+			$structure = array();
+			$args = array();
+			$link = array();
 
+			$tags[] = $rule['slug'];
+			$structure[] = $rule['slug'];
+			$args[] = 'post_type=' . $rule['content_type'];
+			$link[] = $rule['slug'];
 
-		foreach( $rules['rewrite'] as $rule ){
-			$new_rule_path = array();
-			$content_type = $rule[ 'content_type' ];
+			// archive rewrite tag
+			//add_rewrite_tag('%' . $rule_id . '%', '(' . $rule['slug'] .')s', 'post_type=' );
 
-			$new_rule_path[] = Caldera_Easy_Rewrites_Magic_Slug::maybe_do_magic_slug( $rule['slug'], 0, $content_type, true, $post );
+			$index = 1;	
 			if( !empty( $rule['segment'] ) ){
-				$i = 1;
-				foreach( $rule['segment'] as $segment ){
-					if ( isset( $segment[ 'path' ] ) ) {
-						$new_rule_path[] = Caldera_Easy_Rewrites_Magic_Slug::maybe_do_magic_slug( $segment['path'], $i, $content_type, true, $post );
+				foreach( $rule['segment'] as $segment_id=>$segment ){
+
+					switch ( $segment['type'] ) {
+						case 'taxonomy':
+							//add_rewrite_tag('%' . $segment_id . '%', '([^&]+)', $segment['taxonomy'] . '=' );
+							$tags[] = '%' . $segment_id . '%';
+							$structure[] = '([^/]+)';
+							$args[] = $segment['taxonomy'] . '=$matches[' . $index++ . ']';
+							$link[] = array( 'taxonomy' => $segment['taxonomy'] );
+							break;
+						
+						case 'static':
+							$tags[] = $link[] = $structure[] = $segment['path'];
+							break;
+						default:
+							# code...
+							break;
 					}
 
-					$i++;
 				}
 			}
 
-			$new_rule = implode( '/', urlencode_deep( $new_rule_path ) );
+			$this->rule_structs[$rule['content_type']] = $link;
+			$args[] = $rule['content_type'] . '=$matches[' . $index . ']';
 
+			$string 	= "^" . implode( '/', $structure ) . "/([^/]+)/?";
+			$rewrite 	= 'index.php?' . implode( '&', $args );
 
-			foreach( $wp_rewrite->extra_rules_top as $rewrite_rule=>$rule_struct ){
-				if( substr( $rewrite_rule, 0, strlen( $rules['content_types'][$rule['content_type']]['slug'] ) ) === $rules['content_types'][$rule['content_type']]['slug'] ){
-					unset( $wp_rewrite->extra_rules_top[$rewrite_rule] );
-					$rewrite_rule = $new_rule . substr( $rewrite_rule, strlen( $rules['content_types'][$rule['content_type']]['slug'] ) );
-
-					$wp_rewrite->extra_rules_top[$rewrite_rule] = $rule_struct;					
-
-				}
-			}
-			// permalinks
-			$wp_rewrite->extra_permastructs[$rules['content_types'][$rule['content_type']]['slug']]['struct'] = '/' . $new_rule . substr( $wp_rewrite->extra_permastructs[$rules['content_types'][$rule['content_type']]['slug']]['struct'], ( strlen( $rules['content_types'][$rule['content_type']]['slug'] ) + 1 ) );
-
+			// post rewrite rule
+			add_rewrite_rule( $string, $rewrite, 'top' );
+			
+			// archives rewrite rule.
+			//array_shift( $tags ); // get rid of the slug
+			//add_permastruct( $rule['content_type'], '%' . $rule_id . '%/' . implode('/',  $tags ) );
+			//add_permastruct( $rule['content_type'] . '_archive', '%' . $rule_id . '%/' . implode('/',  $tags ) );
 		}
 
 

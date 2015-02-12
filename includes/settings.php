@@ -37,6 +37,7 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 	 */
 	public function rebuild_rules(){
 		flush_rewrite_rules();
+		wp_send_json_success();
 	}
 	/**
 	 * saves a config
@@ -145,5 +146,6 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 
 }
 
-if( is_admin() )
+if( is_admin() || defined( 'DOING_AJAX ') ){
 	$settings_caldera_easy_rewrites = new Settings_Caldera_Easy_Rewrites();
+}
