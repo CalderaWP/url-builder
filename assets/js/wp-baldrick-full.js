@@ -382,7 +382,6 @@ var __module2__ = (function(__dependency1__, __dependency2__) {
     instance.registerHelper('lookup', function(obj, field) {
       return obj && obj[field];
     });
-
   }
 
   var logger = {
@@ -3082,15 +3081,14 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
 
 /* custom helpers */
   Handlebars.registerHelper('find', function(obj, field, options) {
-
+    
     if( typeof obj === 'undefined' || typeof obj[field] === 'undefined' ){
        return options.inverse(this)
     }else{
-     return options.fn(this);
+     return options.fn(obj[field]);
     }
 
   });
-    
   Handlebars.registerHelper("is_single", function(value, options) {
     if(Object.keys(value).length !== 1){
       return false;
@@ -3933,6 +3931,10 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
       if(obj.params.trigger.data('modalAutoclose')){
         $('#' + obj.params.trigger.data('modalAutoclose') + '_baldrickModalCloser').trigger('click');
       }
+      if( obj.params.trigger.data('modal-init') && typeof window[obj.params.trigger.data('modal-init')]() === 'function' ){
+        winodw[obj.params.trigger.data('modal-init')](obj);
+      }
+      
     },
     event : function(el, obj){
       var trigger = $(el), modal_id = 'wm';     
