@@ -14,14 +14,14 @@
 		<input type="hidden" name="rewrite[{{_id}}][content_type]" value="{{content_type}}">
 		<span class="caldera-easy-rewrites-segment-slug">{{content_type}}</span>
 		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">:</span>
-		<input type="text" name="rewrite[{{_id}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}" data-format="key" data-sync="#preview-slug-{{_id}}">
+		<input type="text" name="rewrite[{{_id}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}" data-format="key" data-sync="#preview-slug-{{_id}}" required>
 		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> 
 		{{#each segment}}
 		<span class="caldera-easy-rewrites-rule-segment">
 			
 			<input type="hidden" name="rewrite[{{../_id}}][segment][{{_id}}][_id]" value="{{_id}}">
 
-			<select data-live-sync="true" name="rewrite[{{../_id}}][segment][{{_id}}][type]" style="vertical-align: unset;">
+			<select data-live-sync="true" name="rewrite[{{../_id}}][segment][{{_id}}][type]" style="vertical-align: unset;" class="required">
 				<option></option>
 				{{#find ../../../content_types ../../content_type}}
 					{{#if taxonomies}}
@@ -36,7 +36,7 @@
 
 				{{#find ../../../../content_types ../../content_type}}
 
-					<select data-live-sync="true" name="rewrite[{{../../../_id}}][segment][{{../../_id}}][taxonomy]" style="vertical-align: unset; margin-left: -5px;">
+					<select data-live-sync="true" name="rewrite[{{../../../_id}}][segment][{{../../_id}}][taxonomy]" style="vertical-align: unset; margin-left: -5px;" class="required">
 						<option value=""></option>
 					{{#each taxonomies}}
 						<option value="{{name}}" {{#is ../../taxonomy value="name"}}selected="selected"{{/is}}>{{label}}</option>
