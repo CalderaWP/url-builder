@@ -301,3 +301,30 @@ h4 > small.description {
 .caldera-easy-rewrites-main-headercaldera .loading{
   top: -2px;
 }
+
+
+.caldera-easy-rewrites-rule-wrapper {
+  background-color: #fff;
+  border: 1px solid #dadada;
+  border-radius: 3px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.07);
+  padding: 4px;
+  margin-bottom: 12px;
+}
+.caldera-easy-rewrites-segment-slug {
+  background: none repeat scroll 0 0 #e3e3e3;
+  border: 1px solid #d5d5d5;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 5px 7px;
+}
+.caldera-easy-rewrites-segment-preview {
+  background: none repeat scroll 0 0 #e8e8e8;
+  border-top: 1px solid #dedede;
+  color: #8d8d8d;
+  margin: 4px -4px -4px;
+  padding: 3px;
+}
+.caldera-easy-rewrite-variable{
+  color: #81bf72;
+}
