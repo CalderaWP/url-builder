@@ -1,6 +1,7 @@
 <?php
 
-	// Panel template for Rewite Routes
+	// Panel template for Rewite Routes	
+
 ?>
 
 
@@ -16,25 +17,47 @@
 		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> 
 		{{#each segment}}
 		<span class="caldera-easy-rewrites-rule-segment">
+			
 			<input type="hidden" name="rewrite[{{../_id}}][segment][{{_id}}][_id]" value="{{_id}}">
-			<input type="text" name="rewrite[{{../_id}}][segment][{{_id}}][path]" value="{{path}}" data-format="key" class="required">
+
+			<select data-live-sync="true" name="rewrite[{{../_id}}][segment][{{_id}}][type]" style="vertical-align: unset;">
+				<option></option>
+				<option value="taxonomy" {{#is type value="taxonomy"}}selected="selected"{{/is}}><?php _e( 'Taxonomy', 'caldera-easy-rewrites' ); ?></option>
+				<option value="static" {{#is type value="static"}}selected="selected"{{/is}}><?php _e( 'Static String', 'caldera-easy-rewrites' ); ?></option>
+			</select>
+
+			{{#is type value="taxonomy"}}
+
+				{{#find ../../../../content_types ../../content_type}}
+					<select data-live-sync="true" name="rewrite[{{../../../_id}}][segment][{{../../_id}}][taxomony]" style="vertical-align: unset;">	
+					{{#each taxonomies}}
+						<option value="{{name}}" {{#is ../../taxomony value="name"}}selected="selected"{{/is}}>{{label}}</option>
+					{{/each}}
+					</select>
+				{{/find}}
+			{{/is}}
+
+			{{#is type value="static"}}
+				<input type="text" name="rewrite[{{../../_id}}][segment][{{_id}}][path]" value="{{path}}" data-format="key" class="required">
+			{{/is}}
+
 			<button style="display: inline; font-size: 17px; padding: 0px 5px; border-radius: 0px 4px 4px 0px; margin: 1px 2px 0px -6px;" type="button" class="button" data-remove-parent=".caldera-easy-rewrites-rule-segment">&times;</button>
 			<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> 
 		</span>
 		{{/each}}
 		<button type="button" class="button wp-baldrick" data-request="cew_get_default_setting" type="button" data-script="add-segment" data-node="{{_id}}" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&plus;</button> 
 	{{else}}
-	<input type="hidden" name="new_node" value="true">
-	<select data-live-sync="true" name="rewrite[{{_id}}][content_type]" style="vertical-align: unset;">
-	<option></option>
-	{{#each ../../content_types}}
-		{{#find ../../../used_types @key}}
-		<option value="{{@key}}" disabled="disabled">{{@key}}</option>
-		{{else}}
-		<option value="{{@key}}" {{#is ../content_type value="@key"}}selected="selected"{{/is}}>{{@key}}</option>
-		{{/find}}
-	{{/each}}
-	</select>
+		<input type="hidden" name="new_node" value="true">
+		<select data-live-sync="true" name="rewrite[{{_id}}][content_type]" style="vertical-align: unset;">
+		<option></option>
+		{{#each ../../content_types}}
+			{{#find ../../../used_types @key}}
+			<option value="{{@key}}" disabled="disabled">{{@key}}</option>
+			{{else}}
+			<option value="{{@key}}" {{#is ../content_type value="@key"}}selected="selected"{{/is}}>{{@key}}</option>
+			{{/find}}
+		{{/each}}
+		</select>
 	{{/if}}
 </div>
 {{/each}}

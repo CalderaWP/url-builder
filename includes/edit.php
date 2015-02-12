@@ -11,7 +11,19 @@ $post_types = get_post_types( $post_type_args, 'objects' );
 $caldera_easy_rewrites['content_types'] = array();
 
 foreach( $post_types as $post_type=>$post_object ){
-	$caldera_easy_rewrites['content_types'][ $post_type ] = $post_object->rewrite;
+	
+	$caldera_easy_rewrites['content_types'][ $post_type ] = (array) $post_object->rewrite;
+	// get taxos
+	$taxonomies = get_taxonomies( array( 'object_type' => array( $post_type ) ), 'objects' );
+	if( !empty( $taxonomies ) ){
+		foreach ( $taxonomies as $taxonom_name => $taxonomy) {
+			$caldera_easy_rewrites['content_types'][ $post_type ]['taxonomies'][ $taxonom_name ] = array(
+				'name'	=>	$taxonomy->name,
+				'label'	=>	$taxonomy->label,
+				'terms'	=>	get_terms( $taxonomy->name )
+			);
+		}
+	}
 }
 
 ?>
