@@ -1,4 +1,4 @@
-<div class="caldera-easy-rewrites-main-headerwordpress">
+<div class="caldera-easy-rewrites-main-headercaldera">
 		<h2>
 		<?php _e( 'Caldera Easy Rewrites', 'caldera-easy-rewrites' ); ?> <span class="caldera-easy-rewrites-version"><?php echo CEW_VER; ?></span>
 		<button style="cursor:pointer;" class="add-new-h2 wp-baldrick" id="caldera-easy-rewrites-rebuild-rules" data-event="click" data-action="cew_rebuild_rules" data-active-class="none" data-load-element="#caldera-easy-rewrites-save-indicator"><?php _e('Rebuild Rules', 'caldera-easy-rewrites') ; ?></button>
@@ -12,12 +12,11 @@
 
 	<span class="wp-baldrick" id="caldera-easy-rewrites-field-sync" data-event="refresh" data-target="#caldera-easy-rewrites-main-canvas" data-callback="cew_canvas_init" data-type="json" data-request="#caldera-easy-rewrites-live-config" data-template="#main-ui-template"></span>	
 </div>
-<div class="caldera-easy-rewrites-sub-headerwordpress">
-	<h2 class="caldera-easy-rewrites-sub-tabs caldera-easy-rewrites-nav-tabs nav-tab-wrapper">
-				<a class="{{#is _current_tab value="#caldera-easy-rewrites-panel-routes"}}nav-tab-active {{/is}}caldera-easy-rewrites-nav-tab nav-tab" href="#caldera-easy-rewrites-panel-routes"><?php _e('Rules', 'caldera-easy-rewrites') ; ?></a>
-		<a class="{{#is _current_tab value="#caldera-easy-rewrites-panel-about"}}nav-tab-active {{/is}}caldera-easy-rewrites-nav-tab nav-tab" href="#caldera-easy-rewrites-panel-about"><?php _e('About', 'caldera-easy-rewrites') ; ?></a>
-
-	</h2>
+<div class="caldera-easy-rewrites-sub-headercaldera">
+	<ul class="caldera-easy-rewrites-sub-tabs caldera-easy-rewrites-nav-tabs">
+		<li class="{{#is _current_tab value="#caldera-easy-rewrites-panel-routes"}}active {{/is}}caldera-easy-rewrites-nav-tab"><a href="#caldera-easy-rewrites-panel-routes"><?php _e('Rules', 'caldera-easy-rewrites') ; ?></a></li>
+		<li class="{{#is _current_tab value="#caldera-easy-rewrites-panel-about"}}active {{/is}}caldera-easy-rewrites-nav-tab"><a href="#caldera-easy-rewrites-panel-about"><?php _e('About', 'caldera-easy-rewrites') ; ?></a></li>
+	</ul>
 </div>
 
 <form id="caldera-easy-rewrites-main-form" action="?page=caldera_easy_rewrites" method="POST">

@@ -11,15 +11,15 @@ h4 > small.description {
   font-weight: normal;
 }
 .caldera-easy-rewrites-main-headercaldera {
-	background: none repeat scroll 0 0 #fff;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 8px 0 0 #0035a8 inset;
-	margin: -10px -20px 10px -22px;
-	padding: 0 0 8px 22px;
-	overflow: hidden;
+  background: none repeat scroll 0 0 #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 8px 0 0 #444 inset;
+  margin: -10px -20px 10px -22px;
+  padding: 0 0 8px 22px;
+  overflow: hidden;
 }
 .caldera-easy-rewrites-sub-headercaldera {
   background: none repeat scroll 0 0 #f8f8f8;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 8px 0 0 #0035a8 inset;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 8px 0 0 #444 inset;
   margin: -10px -20px 10px -22px;
   padding: 0 0 0 8px;
   overflow: hidden;
@@ -32,13 +32,13 @@ h4 > small.description {
 }
 
 .caldera-easy-rewrites-main-headercaldera h2 {
-	color: #4f4f4f;
-	font-size: 20px;
-	font-weight: 300;
+  color: #4f4f4f;
+  font-size: 20px;
+  font-weight: 300;
   float: left;
 }
 .caldera-easy-rewrites-main-headercaldera .logo-icon{
-	color: #0035a8;
+  color: #444;
   font-size: 72px;
   margin: -18px 20px 0 -60px;
   opacity: 0.2;
@@ -54,12 +54,12 @@ h4 > small.description {
   display: none;
 }
 .wrap .caldera-easy-rewrites-main-headercaldera .add-new-h2{
-	font-size: 12px;
-	margin: 13px;
-	cursor: pointer;
+  font-size: 12px;
+  margin: 13px;
+  cursor: pointer;
 }
 .caldera-easy-rewrites-main-headercaldera .add-new-h2:hover {
-	background: none repeat scroll 0 0 #0035a8;
+  background: none repeat scroll 0 0 #444;
 }
 
 .caldera-easy-rewrites-main-headercaldera .caldera-easy-rewrites-header-tabs {
@@ -80,13 +80,13 @@ h4 > small.description {
   margin: 0 0 -15px;
   padding: 16px 20px 20px;
   text-decoration: none;
-  color:#0035a8;
+  color:#444;
 }
 .caldera-easy-rewrites-main-headercaldera .caldera-easy-rewrites-header-tabs > li > a:hover{
   background-color: #efefef;
 }
 .caldera-easy-rewrites-main-headercaldera .caldera-easy-rewrites-header-tabs > li.active > a{
-  background-color: #0035a8;
+  background-color: #444;
   color: #fff;
 }
 .caldera-easy-rewrites-sub-headercaldera .caldera-easy-rewrites-sub-tabs > li {
@@ -98,14 +98,14 @@ h4 > small.description {
   margin: 0;
   padding: 6px 14px 8px;
   text-decoration: none;
-  color:#0035a8;
+  color:#444;
 }
 
 .caldera-easy-rewrites-sub-headercaldera .caldera-easy-rewrites-sub-tabs > li > a:hover{
   background-color: #efefef;
 }
 .caldera-easy-rewrites-sub-headercaldera .caldera-easy-rewrites-sub-tabs > li.active > a{
-  background-color: #0035a8;
+  background-color: #444;
   color: #fff;
 }
 .caldera-easy-rewrites-split-panel {
@@ -117,11 +117,11 @@ h4 > small.description {
   width: 280px;
 }
 .caldera-easy-rewrites-side-list > label{
-	display: block;
+  display: block;
 }
 .caldera-easy-rewrites-side-list > select {
-	width: 100%;
-	margin-bottom: 2px;
+  width: 100%;
+  margin-bottom: 2px;
 }
 
 .caldera-easy-rewrites-footer-bar {
@@ -263,7 +263,7 @@ h4 > small.description {
   min-height: 90px;
 }
 .caldera-easy-rewrites-card-item .caldera-easy-rewrites-card-content > h4{
-	margin: 0;
+  margin: 0;
 }
 
 .caldera-easy-rewrites-card-content input[type="text"] {
@@ -277,21 +277,27 @@ h4 > small.description {
   padding: 0;
 }
 .caldera-easy-rewrites-card-content .caldera-easy-rewrites-card-actions .row-actions{
-	visibility: visible;
+  visibility: visible;
 }
 .caldera-easy-rewrites-card-content .caldera-easy-rewrites-card-actions .row-actions a{
-	text-decoration: none;
+  text-decoration: none;
 }
 #caldera-easy-rewrites-save-indicator.loading .spinner{
   display: block;
 }
 
 
-
-.baldrick-modal-title .baldrick-modal-closer:hover {
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.07);
+.baldrick-modal-title .modal-label,
+.baldrick-modal-title .baldrick-modal-closer{
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
-
-.caldera-easy-rewrites-main-headerwordpress .loading{
-	top: 8px;
+.baldrick-modal-title .baldrick-modal-closer:hover {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+}
+.baldrick-modal-title .modal-label{
+  background-color: #444;
+}
+.caldera-easy-rewrites-main-headercaldera .loading{
+  top: -2px;
 }
