@@ -136,7 +136,7 @@ class Caldera_Easy_Rewrites {
 			$link[] = $rule['slug'];
 
 			// archive rewrite tag
-			//add_rewrite_tag('%' . $rule_id . '%', '(' . $rule['slug'] .')s', 'post_type=' );
+			add_rewrite_tag('%' . $rule_id . '%', '(' . $rule['slug'] .')s', 'post_type=' );
 
 			$index = 1;	
 			if( !empty( $rule['segment'] ) ){
@@ -144,7 +144,7 @@ class Caldera_Easy_Rewrites {
 
 					switch ( $segment['type'] ) {
 						case 'taxonomy':
-							//add_rewrite_tag('%' . $segment_id . '%', '([^&]+)', $segment['taxonomy'] . '=' );
+							add_rewrite_tag('%' . $segment_id . '%', '([^&]+)', $segment['taxonomy'] . '=' );
 							$tags[] = '%' . $segment_id . '%';
 							$structure[] = '([^/]+)';
 							$args[] = $segment['taxonomy'] . '=$matches[' . $index++ . ']';
@@ -172,8 +172,8 @@ class Caldera_Easy_Rewrites {
 			add_rewrite_rule( $string, $rewrite, 'top' );
 			
 			// archives rewrite rule.
-			//array_shift( $tags ); // get rid of the slug
-			//add_permastruct( $rule['content_type'], '%' . $rule_id . '%/' . implode('/',  $tags ) );
+			array_shift( $tags ); // get rid of the slug
+			add_permastruct( $rule['content_type'], '%' . $rule_id . '%/' . implode('/',  $tags ) );
 			//add_permastruct( $rule['content_type'] . '_archive', '%' . $rule_id . '%/' . implode('/',  $tags ) );
 		}
 
