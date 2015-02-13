@@ -58,17 +58,19 @@ jQuery( function($){
 	}
 
 	// internal function declarationas
-	cew_get_config_object = function(el){
+	cew_get_config_object = function(el, e){
+
+		e.preventDefault();
 		// new sync first
 		$('#caldera_easy_rewrites-id').trigger('change');
 		var clicked 	= $(el),
 			config 		= $('#caldera-easy-rewrites-live-config').val(),
-			required 	= $('[required]'),
+			required 	= $('.required'),
 			clean		= true;
 
 		for( var input = 0; input < required.length; input++ ){
 			if( required[input].value.length <= 0 && $( required[input] ).is(':visible') ){
-				$( required[input] ).addClass('caldera-easy-rewrites-input-error');
+				$( required[input] ).addClass('caldera-easy-rewrites-input-error').focus();
 				clean = false;
 			}else{
 				$( required[input] ).removeClass('caldera-easy-rewrites-input-error');
@@ -83,6 +85,9 @@ jQuery( function($){
 
 	cew_record_change = function(){
 		// hook and rebuild the fields list
+
+		console.log('asd');
+
 		jQuery(document).trigger('record_change');
 		jQuery('#caldera_easy_rewrites-id').trigger('change');
 		jQuery('#caldera-easy-rewrites-field-sync').trigger('refresh');
