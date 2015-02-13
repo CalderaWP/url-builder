@@ -302,6 +302,9 @@ h4 > small.description {
   top: -2px;
 }
 
+.caldera-easy-rewrites-segment-list span:first-child .button{
+  display: none !important;
+}
 
 .caldera-easy-rewrites-rule-wrapper {
   background-color: #fff;

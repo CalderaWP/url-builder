@@ -53,7 +53,7 @@ class Caldera_Easy_Rewrites {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_stylescripts' ) );
 
 		// filter permalinks.
-		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 2 );
+		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 3 );
 	}
 
 	/**
@@ -64,13 +64,16 @@ class Caldera_Easy_Rewrites {
 	 *
 	 * @return    string    url permalink
 	 */
-	public function create_permalink( $post_link, $post_id ){
+	public function create_permalink( $post_link, $post_id, $sample ){
 
 		global $wp_query;
-		
-		$post = get_post( $post_id );
 
-		if ( is_wp_error($post) || !isset( $this->rule_structs[$post->post_type] ) || empty($post->post_name) ){
+		$post = get_post( $post_id );
+		if( true === $sample ){
+			$post->post_name = '%postname%'; // allow the edit
+		}
+
+		if ( is_wp_error($post) || !isset( $this->rule_structs[$post->post_type] ) || ( empty( $post->post_name ) && false === $sample ) ){
 			return $post_link;
 		}
 
@@ -89,7 +92,7 @@ class Caldera_Easy_Rewrites {
 						$terms = get_the_terms( $post->ID, $path['taxonomy'] );
 
 						if( is_wp_error( $terms ) || empty( $terms ) ) {
-							$new_link[] = __( 'uncategorised', 'caldera-easy-rewrites' );
+							$new_link[] = $path['default'];
 						}else {
 							$term_obj = array_pop( $terms );
 							$new_link[] = $term_obj->slug;
@@ -106,7 +109,7 @@ class Caldera_Easy_Rewrites {
 
 		// add name
 		$new_link[] = $post->post_name;
-
+		
 		return home_url(user_trailingslashit( implode( '/', $new_link ) ) );
 	}
 	/**
@@ -131,12 +134,12 @@ class Caldera_Easy_Rewrites {
 			$link = array();
 
 			$tags[] = $rule['slug'];
-			$structure[] = $rule['slug'];
+			//$structure[] = $rule['slug'];
 			$args[] = 'post_type=' . $rule['content_type'];
-			$link[] = $rule['slug'];
+			//$link[] = $rule['slug'];
 
 			// archive rewrite tag
-			add_rewrite_tag('%' . $rule_id . '%', '(' . $rule['slug'] .')s', 'post_type=' );
+			//add_rewrite_tag('%' . $rule_id . '%', '(' . $rule['slug'] .')s', 'post_type=' );
 
 			$index = 1;	
 			if( !empty( $rule['segment'] ) ){
@@ -145,10 +148,10 @@ class Caldera_Easy_Rewrites {
 					switch ( $segment['type'] ) {
 						case 'taxonomy':
 							add_rewrite_tag('%' . $segment_id . '%', '([^&]+)', $segment['taxonomy'] . '=' );
-							$tags[] = '%' . $segment_id . '%';
+							$tags[] = $segment['taxonomy'];
 							$structure[] = '([^/]+)';
 							$args[] = $segment['taxonomy'] . '=$matches[' . $index++ . ']';
-							$link[] = array( 'taxonomy' => $segment['taxonomy'] );
+							$link[] = array( 'taxonomy' => $segment['taxonomy'], 'default' => $segment['default'] );
 							break;
 						
 						case 'static':
@@ -162,18 +165,22 @@ class Caldera_Easy_Rewrites {
 				}
 			}
 
+			// record structure for link filter
 			$this->rule_structs[$rule['content_type']] = $link;
 			$args[] = $rule['content_type'] . '=$matches[' . $index . ']';
 
+			// rewtire string and path
 			$string 	= "^" . implode( '/', $structure ) . "/([^/]+)/?";
 			$rewrite 	= 'index.php?' . implode( '&', $args );
 
 			// post rewrite rule
 			add_rewrite_rule( $string, $rewrite, 'top' );
-			
+
 			// archives rewrite rule.
 			array_shift( $tags ); // get rid of the slug
-			add_permastruct( $rule['content_type'], '%' . $rule_id . '%/' . implode('/',  $tags ) );
+
+			add_permastruct( $rule['content_type'], '/' . implode('/',  $tags ) . '/' );
+			//add_permastruct( $rule['content_type'] . '_archive', implode('/',  $tags ) );
 			//add_permastruct( $rule['content_type'] . '_archive', '%' . $rule_id . '%/' . implode('/',  $tags ) );
 		}
 
