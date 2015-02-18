@@ -39,14 +39,14 @@ jQuery( function($){
 					for( var p = 0; p < result.data[ type ].length; p++ ){
 
 						// whats the clash?
-						if( result.data[ type ][p]['attachment'] && type !== 'attachment' ){
+						if( result.data[ type ][p]['post_type'] && type !== result.data[ type ][p]['post_type'] ){
+							clashes.push( result.data[ type ][p]['post_type'] );
+						}else if( result.data[ type ][p]['attachment'] && type !== 'attachment' ){
 							//clashes.push( 'Attachments' );
 						}else if( result.data[ type ][p]['pagename'] && type !== 'page' ){
 							clashes.push( 'Page' );
 						}else if( result.data[ type ][p]['name'] && type !== 'post' ){
 							clashes.push( 'Post' );
-						}else if( result.data[ type ][p]['post_type'] && type !== result.data[ type ][p]['post_type'] ){
-							clashes.push( result.data[ type ][p]['post_type'] );
 						}
 
 					}
