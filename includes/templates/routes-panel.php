@@ -59,7 +59,7 @@
 				{{/is}}
 
 				{{#is type value="static"}}
-					<input type="text" name="rewrite[{{../../_id}}][segment][{{_id}}][path]" value="{{path}}" data-sync="#preview-segment-{{_id}}" data-format="key" class="required">
+					<input type="text" name="rewrite[{{../../_id}}][segment][{{_id}}][path]" value="{{path}}" data-sync="#preview-segment-{{_id}}" data-live-sync="true" data-format="key" class="required">
 				{{/is}}
 
 				<button dlass="caldera-easy-rewrites-remove-segment" style="display: inline; font-size: 17px; padding: 0px 5px; border-radius: 0px 4px 4px 0px; margin: 1px 2px 0px -6px;" type="button" class="button" data-remove-parent=".caldera-easy-rewrites-rule-segment">&times;</button>
@@ -69,7 +69,7 @@
 		</span>
 		<button type="button" {{#unless segment}}data-autoload="true"{{/unless}} class="button add-new-segment wp-baldrick" data-request="cew_get_default_setting" type="button" data-script="add-segment" data-node="{{_id}}" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&plus;</button> 
 
-		<div class="caldera-easy-rewrites-segment-preview">
+		<div class="caldera-easy-rewrites-segment-preview preview-type-{{content_type}}">
 		<?php echo site_url( ); ?> <span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>
 		<?php /*<span id="preview-slug-{{_id}}">{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}</span>
 		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> */ ?>
@@ -100,6 +100,10 @@
 
 <hr>
 <button id="caldera-easy-rewrite-add-rule-button" type="button" class="button wp-baldrick" data-request="cew_get_default_setting" type="button" data-add-node="rewrite"><?php _e( 'Add Rule', 'caldera-easy-rewrites' ); ?></button>
+
+<div id="rewrite-notice-error" style="display:none;"><?php _e('Rewrite clashes with: ', 'caldera-easy-rewrites'); ?></div>
+<div id="rewrite-notice-success" style="display:none;"><?php _e('Looks good!', 'caldera-easy-rewrites'); ?></div>
+
 {{#script}}
 if( jQuery('.caldera-easy-rewrite-new-rule-select').length ){
 	jQuery('#caldera-easy-rewrite-add-rule-button').prop('disabled', 'true').remove();

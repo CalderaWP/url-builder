@@ -1,23 +1,76 @@
 var caldera_easy_rewrites_canvas = false,
 	cew_get_config_object,
 	cew_record_change,
-	cew_rebuild_trigger,
 	cew_canvas_init,
 	cew_get_default_setting,
-	cew_code_editor,
 	init_magic_tags,
 	cew_rebuild_magics,
 	config_object = {},
 	magic_tags = [],
-	content_types;
+	cew_rebuild_results,
+	content_types,
+	cew_initial_load = true;
 
 jQuery( function($){
 
-	cew_rebuild_trigger = function(){
-		setTimeout( function(){
-			$('#caldera-easy-rewrites-rebuild-rules').trigger('click');
-		}, 1 );
+
+	cew_rebuild_results = function( obj ){
+
+		var result = obj.data, clashes = [];
+
+		for( var type in result.data ){
+			
+			clashes = [];
+
+			$( '.preview-type-' + type ).removeClass('warning').removeClass('danger').removeClass('success').find('.notice').remove();
+			
+
+			if( typeof result.data[ type ]['warning'] !== 'undefined' ){
+
+				// error - no posts
+				$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + result.data[ type ]['warning'] + '</span>');
+
+			}else{
+
+				if( result.data[ type ].length > 1){
+					// error
+					$( '.preview-type-' + type ).addClass('danger').append('<span class="notice">' + $('#rewrite-notice-error').html() + '</span>');					
+					for( var p = 0; p < result.data[ type ].length; p++ ){
+
+						// whats the clash?
+						if( result.data[ type ][p]['attachment'] && type !== 'attachment' ){
+							clashes.push( 'Attachments' );
+						}else if( result.data[ type ][p]['pagename'] && type !== 'page' ){
+							clashes.push( 'Page' );
+						}else if( result.data[ type ][p]['name'] && type !== 'post' ){
+							clashes.push( 'Post' );
+						}else if( result.data[ type ][p]['post_type'] && type !== result.data[ type ][p]['post_type'] ){
+							clashes.push( result.data[ type ][p]['post_type'] );
+						}
+
+					}
+					var last = false
+					if( clashes.length > 1 ){
+						last = clashes.pop();
+					}
+					$( '.preview-type-' + type + ' .notice').append( clashes.join(', ') );
+					if( last ){
+						$( '.preview-type-' + type + ' .notice' ).append( ' & ' + last );
+					}
+				}else{
+					// tis good
+					$( '.preview-type-' + type ).addClass('success').append('<span class="notice">' + $('#rewrite-notice-success').html() + '</span>');
+				}
+
+			}
+		}
+		if( false === cew_initial_load ){
+			caldera_easy_rewrites_canvas = 'tested';			
+		}
+		cew_initial_load = false;
 	}
+
+
 	init_magic_tags = function(){
 		//init magic tags
 		var magicfields = jQuery('.magic-tag-enabled');
@@ -88,6 +141,7 @@ jQuery( function($){
 		jQuery(document).trigger('record_change');
 		jQuery('#caldera_easy_rewrites-id').trigger('change');
 		jQuery('#caldera-easy-rewrites-field-sync').trigger('refresh');
+
 	}
 	
 	cew_canvas_init = function(){
@@ -98,8 +152,7 @@ jQuery( function($){
 				config_object = jQuery('#caldera-easy-rewrites-main-form').formJSON(); // perhaps load into memory to keep it live.
 				jQuery('#caldera-easy-rewrites-live-config').val( JSON.stringify( config_object ) ).trigger('change');
 			});
-			// bind editor
-			cew_init_editor();
+
 			caldera_easy_rewrites_canvas = jQuery('#caldera-easy-rewrites-live-config').val();
 			config_object = JSON.parse( caldera_easy_rewrites_canvas ); // perhaps load into memory to keep it live.
 		}
@@ -129,6 +182,7 @@ jQuery( function($){
 		// rebuild tags
 		cew_rebuild_magics();
 		jQuery(document).trigger('canvas_init');
+		jQuery( '#caldera-easy-rewrites-test-rules').trigger('testlines');
 	}
 	cew_get_default_setting = function(obj){
 
@@ -396,17 +450,6 @@ jQuery( function($){
 		$('.caldera-easy-rewrites-editor-panel').hide();
 		$( tab_id ).show();
 		
-		if( cew_code_editor ){
-			cew_code_editor.toTextArea();
-			cew_code_editor = false;
-		}
-
-		if( $( tab_id ).find('.caldera-easy-rewrites-code-editor').length ){
-
-			cew_init_editor( $( tab_id ).find('.caldera-easy-rewrites-code-editor').prop('id') );
-			cew_code_editor.refresh();
-			cew_code_editor.focus();
-		}
 
 		jQuery('#caldera-easy-rewrites-active-tab').val(tab_id).trigger('change');
 
@@ -422,7 +465,7 @@ jQuery( function($){
 			}
 		}
 		parent.remove();
-		cew_record_change();
+		cew_record_change();		
 	});
 	
 	// init tags
@@ -437,6 +480,7 @@ jQuery( function($){
 	// initialize live sync rebuild
 	$(document).on('change', '[data-live-sync]', function(e){
 		cew_record_change();
+		
 	});
 
 	// initialise baldrick triggers
@@ -462,324 +506,3 @@ jQuery( function($){
 
 
 
-function cew_init_editor(el){
-	if( !jQuery('#' + el).length ){
-		return;
-	}	
-	// custom modes
-	var mustache = function(caldera_easy_rewrites, state) {
-
-		var ch;
-
-		if (caldera_easy_rewrites.match("{{")) {
-			while ((ch = caldera_easy_rewrites.next()) != null){
-				if (ch == "}" && caldera_easy_rewrites.next() == "}") break;
-			}
-			caldera_easy_rewrites.eat("}");
-			return "mustache";
-		}
-		/*
-		if (caldera_easy_rewrites.match("{")) {
-			while ((ch = caldera_easy_rewrites.next()) != null)
-				if (ch == "}") break;
-			caldera_easy_rewrites.eat("}");
-			return "mustacheinternal";
-		}*/
-		if (caldera_easy_rewrites.match("%")) {
-			while ((ch = caldera_easy_rewrites.next()) != null)
-				if (ch == "%") break;
-			caldera_easy_rewrites.eat("%");
-			return "command";
-		}
-
-		/*
-		if (caldera_easy_rewrites.match("[[")) {
-			while ((ch = caldera_easy_rewrites.next()) != null)
-				if (ch == "]" && caldera_easy_rewrites.next() == "]") break;
-			caldera_easy_rewrites.eat("]");
-			return "include";
-		}*/
-		while (caldera_easy_rewrites.next() != null && 
-			//!caldera_easy_rewrites.match("{", false) && 
-			!caldera_easy_rewrites.match("{{", false) && 
-			!caldera_easy_rewrites.match("%", false) ) {}
-			return null;
-	};
-
-	var options = {
-		lineNumbers: true,
-		matchBrackets: true,
-		tabSize: 2,
-		indentUnit: 2,
-		indentWithTabs: true,
-		enterMode: "keep",
-		tabMode: "shift",
-		lineWrapping: true,
-		extraKeys: {"Ctrl-Space": "autocomplete"},
-		};
-	// base mode
-
-	CodeMirror.defineMode("mustache", function(config, parserConfig) {
-		var mustacheOverlay = {
-			token: mustache
-		};
-		return CodeMirror.overlayMode(CodeMirror.getMode(config, parserConfig.backdrop || 'text/html' ), mustacheOverlay);
-	});
-	options.mode = jQuery('#' + el).data('mode') ? jQuery('#' + el).data('mode') : "mustache";
-
-	cew_code_editor = CodeMirror.fromTextArea(document.getElementById(el), options);
-	cew_code_editor.on('keyup', tagFields);
-	cew_code_editor.on('blur', function(cm){
-		cm.save();
-		jQuery( cm.getInputField() ).trigger('change');
-	});
-
-	return cew_code_editor;
-
-}
-(function() {
-	"use strict";
-
-	if( typeof CodeMirror === 'undefined' || caldera_easy_rewrites_canvas === false ){
-		return;
-	}
-
-	var Pos         = CodeMirror.Pos;
-
-	function getFields(cm, options) {
-
-		var cur = cm.getCursor(), token = cm.getTokenAt(cur),
-		result = [],
-		fields = options.fields;
-
-		if( cm.getMode().name === 'sqlmustache' ){
-			options.mode = 'sqlmustache';
-		}
-		switch (options.mode){
-			case 'mustache':
-			var wrap = {start: "{{", end: "}}"},
-			prefix = token.string.slice(2);
-			break;
-			case 'command':
-			var wrap = {start: "%", end: "%"},
-			prefix = token.string.slice(1);
-			break;
-			default:
-			var wrap = {start: "", end: "}}"},
-			prefix = token.string;
-			break;
-		}
-		for( var field in fields){			
-			if (field.indexOf(prefix) == 0 || prefix === '{' || fields[field].indexOf(prefix) == 0){
-				if(prefix === '{'){
-					wrap.start = '{';
-				}
-				result.push({text: wrap.start + field + wrap.end, displayText: fields[field]});
-			}
-		};
-
-		return {
-			list: result,
-			from: Pos(cur.line, token.start),
-			to: Pos(cur.line, token.end)
-		};
-	}
-	CodeMirror.registerHelper("hint", "elementfield", getFields);
-})();
-
-function find_if_in_wrapper( open_entry, close_entry, cm ){
-	in_entry = false;
-	if( open_entry.findPrevious() ){
-		
-
-
-		// is entry. check if closed
-		var open_pos  = open_entry.from();
-
-		if( close_entry.findPrevious() ){
-			// if closed after open then not in			
-			var close_pos = close_entry.from();
-			if( open_pos.line > close_pos.line ){
-				// open is after close - on entry				
-				in_entry = open_pos
-			}else if( open_pos.line === close_pos.line ){
-				// smame line - what point?
-				if( open_pos.ch > close_pos.ch ){
-					//after close - in entry
-					in_entry = open_pos;
-				}
-			}else{
-				
-				open_entry 	= cm.getSearchCursor('{{#each ', open_pos);
-
-				return find_if_in_wrapper( open_entry, close_entry, cm )
-			}
-
-		}else{
-			
-			in_entry = open_pos;
-		}
-
-	}
-
-	// set the parent
-	if( in_entry ){
-		// find what tag is open
-		var close_tag 	= cm.getSearchCursor( '}}', in_entry );
-		if( close_tag.findNext() ){
-			var close_pos	= close_tag.from();
-				start_tag	= open_entry.to();
-			
-			in_entry = cm.getRange( start_tag, close_pos );
-
-		}
-
-	}
-
-	return in_entry;
-}
-
-function tagFields(cm, e) {
-	if( e.keyCode === 8 ){
-		return; // no backspace.
-	}
-	//console.log( cm );
-	var cur = cm.getCursor();
-
-	// test search 
-	var open_entry 	= cm.getSearchCursor('{{#each ', cur);
-	var close_entry = cm.getSearchCursor('{{/each}}', cur);
-	var open_if 	= cm.getSearchCursor('{{#if ', cur);
-	var close_if 	= cm.getSearchCursor('{{/if', cur);	
-
-	var in_entry 	= find_if_in_wrapper( open_entry, close_entry, cm );
-	var in_if 		= false;
-
-
-
-
-
-	if( open_if.findPrevious() ){
-		// is if. check if closed
-		var open_pos  = open_if.from();
-
-		if( close_if.findPrevious() ){
-			// if closed after open then not in			
-			var close_pos = close_if.from();
-			if( open_pos.line > close_pos.line ){
-				// open is after close - on if
-				in_if = true
-			}else if( open_pos.line === close_pos.line ){
-				// smame line - what point?
-				if( open_pos.ch > close_pos.ch ){
-					//after close - in if
-					in_if = true;
-				}
-			}
-
-		}else{
-			in_if = true;
-		}
-	}
-
-	if( in_if ){
-		// find what tag is open
-		var close_tag 	= cm.getSearchCursor( '}}', open_pos );
-		if( close_tag.findNext() ){
-			var close_pos	= close_tag.from();
-				start_tag	= open_entry.to();
-			
-			in_if = cm.getRange( start_tag, close_pos );
-
-		}
-
-	}
-
-	if (!cm.state.completionActive || e.keyCode === 18){
-		var token = cm.getTokenAt(cur), prefix,
-		prefix = token.string.slice(0);
-		if(prefix){
-			if(token.type){
-				var fields = {};
-				//console.log( token );
-				if( token.type ){
-					// only show fields within the entry
-					if( in_entry ){
-						
-						if( !in_if ){
-							// dont allow closing #each if in if
-							fields = {
-								"/each"			:	"/each"
-							};
-						}
-
-						// ADD INDEX KEY
-						fields['@key'] = "@key";
-
-						jQuery('.caldera-easy-rewrites-autocomplete-in-entry-' + token.type).each(function(){
-							var field = jQuery(this);
-
-							if( !field.hasClass('parent-' + in_entry) && !field.hasClass('parant-all') ){
-								return;
-							}
-
-							fields[field.data('slug')] = field.data('label');
-							//fields["#each " + field.data('slug')] = "#each " + field.data('label');
-							//if( !in_if ){
-								if( field.data('label').indexOf('#') < 0 ){
-									fields["#if " + field.data('slug')] = "#if " + field.data('label');
-								}
-							//}
-							//fields["#unless " + field.data('slug')] = "#unless " + field.data('label');
-						});
-					}else{
-
-						jQuery('.caldera-easy-rewrites-autocomplete-out-entry-' + token.type).each(function(){
-							var field = jQuery(this);
-							fields[field.data('slug')] = field.data('label');
-							//fields["#each " + field.data('slug')] = "#each " + field.data('label');
-							//if( !in_if ){
-								if( field.data('label').indexOf('#') < 0 ){
-									fields["#if " + field.data('slug')] = "#if " + field.data('label');
-								}
-							//}
-							//fields["#unless " + field.data('slug')] = "#unless " + field.data('label');
-						});
-
-					}
-
-					if( in_if ){
-						fields['else'] = 'else';
-						fields['/if'] = '/if';
-					}
-				}
-				// sort hack
-				var keys = [];
-				var commands = [];
-				var sorted_obj = {};
-
-				for(var key in fields){
-				    if(fields.hasOwnProperty(key)){
-				    	if( key.indexOf('#') < 0 && key.indexOf('/') < 0 ){
-				        	keys.push(key);
-				    	}else{
-				    		commands.push(key);
-				    	}
-				    }
-				}
-
-				// sort keys
-				keys.sort();
-				commands.sort();
-				keys = keys.concat(commands);
-				// create new array based on Sorted Keys
-				jQuery.each(keys, function(i, key){
-				    sorted_obj[key] = fields[key];
-				});
-				CodeMirror.showHint(cm, CodeMirror.hint.elementfield, {fields: sorted_obj, mode: token.type});
-
-			}
-		}
-	}
-	return;
-}

@@ -329,7 +329,23 @@ h4 > small.description {
   color: #8d8d8d;
   margin: 4px -4px -4px;
   padding: 3px;
+  padding-left: 12px;
 }
 .caldera-easy-rewrite-variable{
   color: #81bf72;
 }
+
+.caldera-easy-rewrites-segment-preview.danger {
+  box-shadow: 6px 0 0 #da2b2c inset;  
+  color: #da2b2c;
+  background-color: #eee7d7;
+}
+.caldera-easy-rewrites-segment-preview.warning {
+  box-shadow: 6px 0 0 #df9f4f inset;
+  background-color: #f2ebdb;
+}
+.caldera-easy-rewrites-segment-preview.success {
+  box-shadow: 6px 0 0 #84b040 inset;
+  background-color: #e8ffd8;
+}
+

@@ -1,8 +1,12 @@
 <div class="caldera-easy-rewrites-main-headercaldera">
 		<h2>
 		<?php _e( 'Caldera Easy Rewrites', 'caldera-easy-rewrites' ); ?> <span class="caldera-easy-rewrites-version"><?php echo CEW_VER; ?></span>
-		<button style="cursor:pointer;" class="add-new-h2 wp-baldrick" id="caldera-easy-rewrites-rebuild-rules" data-event="click" data-action="cew_rebuild_rules" data-active-class="none" data-load-element="#caldera-easy-rewrites-save-indicator"><?php _e('Rebuild Rules', 'caldera-easy-rewrites') ; ?></button>
-		<span style="position: absolute; top: 8px;" id="caldera-easy-rewrites-save-indicator"><span style="float: none; margin: 16px 0px -5px 10px;" class="spinner"></span></span>
+
+		<button type="submit" class="add-new-h2 wp-baldrick" data-action="cew_save_config" data-active-class="none" data-load-element="#caldera-easy-rewrites-save-indicator" data-before="cew_get_config_object" ><?php _e('Save Changes', 'caldera-easy-rewrites') ; ?></button>
+		<button type="submit" class="add-new-h2 wp-baldrick" data-action="cew_rebuild_rules" data-active-class="none" data-load-element="#caldera-easy-rewrites-save-indicator"><?php _e('Rebuild Rewrites', 'caldera-easy-rewrites') ; ?></button>
+
+		<span class="wp-baldrick" id="caldera-easy-rewrites-test-rules" data-event="testlines" data-autoload="true" data-action="cew_test_rules" data-before="cew_get_config_object" data-callback="cew_rebuild_results" data-active-class="none" data-load-element="#scaldera-easy-rewrites-save-indicator"></span>
+		<span style="display: inline-block;" id="caldera-easy-rewrites-save-indicator"><span style="float: none; margin: 0px 0px -2px;" class="spinner"></span></span>
 
 	</h2>
 			<div class="subsubsub caldera-easy-rewrites-nav-tabs">
@@ -41,9 +45,6 @@
 
 	
 	<div class="clear"></div>
-	<div class="caldera-easy-rewrites-footer-bar">
-		<button type="submit" class="button button-primary wp-baldrick" data-action="cew_save_config" data-active-class="none" data-load-element="#caldera-easy-rewrites-save-indicator" data-callback="cew_rebuild_trigger" data-before="cew_get_config_object" ><?php _e('Save Changes', 'caldera-easy-rewrites') ; ?></button>
-	</div>	
 
 </form>
 {{#unless _current_tab}}
