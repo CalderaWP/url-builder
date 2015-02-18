@@ -103,6 +103,7 @@
 
 <div id="rewrite-notice-error" style="display:none;"><?php _e('Rewrite clashes with: ', 'caldera-easy-rewrites'); ?></div>
 <div id="rewrite-notice-success" style="display:none;"><?php _e('Looks good!', 'caldera-easy-rewrites'); ?></div>
+<div id="rewrite-notice-warning" style="display:none;"><?php _e('Looks good, but will clash with "attachments".', 'caldera-easy-rewrites'); ?></div>
 
 {{#script}}
 if( jQuery('.caldera-easy-rewrite-new-rule-select').length ){

@@ -31,15 +31,15 @@ jQuery( function($){
 				$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + result.data[ type ]['warning'] + '</span>');
 
 			}else{
-
-				if( result.data[ type ].length > 1){
+				
+				if( result.data[ type ].length > 2 && typeof result.data[ type ][0]['attachment'] !== 'undefined' ){
 					// error
 					$( '.preview-type-' + type ).addClass('danger').append('<span class="notice">' + $('#rewrite-notice-error').html() + '</span>');					
 					for( var p = 0; p < result.data[ type ].length; p++ ){
 
 						// whats the clash?
 						if( result.data[ type ][p]['attachment'] && type !== 'attachment' ){
-							clashes.push( 'Attachments' );
+							//clashes.push( 'Attachments' );
 						}else if( result.data[ type ][p]['pagename'] && type !== 'page' ){
 							clashes.push( 'Page' );
 						}else if( result.data[ type ][p]['name'] && type !== 'post' ){
@@ -57,6 +57,8 @@ jQuery( function($){
 					if( last ){
 						$( '.preview-type-' + type + ' .notice' ).append( ' & ' + last );
 					}
+				}else if( result.data[ type ].length === 2 && typeof result.data[ type ][0]['attachment'] === 'undefined' ){
+					$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + $('#rewrite-notice-warning').html() + '</span>');
 				}else{
 					// tis good
 					$( '.preview-type-' + type ).addClass('success').append('<span class="notice">' + $('#rewrite-notice-success').html() + '</span>');
