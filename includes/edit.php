@@ -1,5 +1,7 @@
 <?php
 
+global $wpdb;
+
 $caldera_easy_rewrites = get_option( '_caldera_easy_rewrites' );
 // load post types
 $post_type_args = array(
@@ -24,7 +26,34 @@ foreach( $post_types as $post_type=>$post_object ){
 			);
 		}
 	}
+	// get custom field keys
+	/*$custom_field_keys = $wpdb->get_results( $wpdb->prepare( "SELECT 
+	 	
+	 	`" . $wpdb->postmeta . "`.`meta_key` AS `meta_key`, 
+	 	`" . $wpdb->postmeta . "`.`meta_value` AS `meta_value`
+
+		FROM `" . $wpdb->postmeta . "` 
+		LEFT JOIN `" . $wpdb->posts . "` ON (`" . $wpdb->postmeta . "`.`post_id` = `" . $wpdb->posts . "`.`ID`)
+		
+		WHERE
+		`" . $wpdb->posts . "`.`post_type` = %s
+		AND
+		SUBSTR(`" . $wpdb->postmeta . "`.`meta_key`,1,1) != '_'", $post_type ) );
+	
+	if( !empty( $custom_field_keys ) ){
+		var_dump( $custom_field_keys );
+		die;
+		foreach( $custom_field_keys as $custom_fields ){
+
+			$caldera_easy_rewrites['content_types'][ $post_type ]['custom_fields'][ $custom_fields->meta_key ] = $custom_fields->meta_key;
+
+		}
+
+	}*/
+
 }
+
+
 
 ?>
 <div class="wrap" id="caldera-easy-rewrites-main-canvas">
