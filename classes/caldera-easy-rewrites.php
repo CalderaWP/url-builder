@@ -54,6 +54,10 @@ class Caldera_Easy_Rewrites {
 
 		// filter permalinks.
 		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 3 );
+		add_filter( 'post_link', array( $this, 'create_permalink' ), 10, 3 );
+		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
+		add_filter( 'page_link', array( $this, 'create_permalink' ), 10, 3 );
+
 	}
 
 	/**
@@ -64,7 +68,7 @@ class Caldera_Easy_Rewrites {
 	 *
 	 * @return    string    url permalink
 	 */
-	public function create_permalink( $post_link, $post_id, $sample ){
+	public function create_permalink( $post_link, $post_id, $sample = false){
 
 		global $wp_query;
 

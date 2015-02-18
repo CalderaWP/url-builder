@@ -67,7 +67,7 @@
 			</span>
 			{{/each}}
 		</span>
-		<button type="button" {{#unless segment}}data-autoload="true"{{/unless}} class="button wp-baldrick" data-request="cew_get_default_setting" type="button" data-script="add-segment" data-node="{{_id}}" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&plus;</button> 
+		<button type="button" {{#unless segment}}data-autoload="true"{{/unless}} class="button add-new-segment wp-baldrick" data-request="cew_get_default_setting" type="button" data-script="add-segment" data-node="{{_id}}" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&plus;</button> 
 
 		<div class="caldera-easy-rewrites-segment-preview">
 		<?php echo site_url( ); ?> <span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>

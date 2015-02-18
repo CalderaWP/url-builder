@@ -85,9 +85,6 @@ jQuery( function($){
 
 	cew_record_change = function(){
 		// hook and rebuild the fields list
-
-		console.log('asd');
-
 		jQuery(document).trigger('record_change');
 		jQuery('#caldera_easy_rewrites-id').trigger('change');
 		jQuery('#caldera-easy-rewrites-field-sync').trigger('refresh');
@@ -305,7 +302,16 @@ jQuery( function($){
 	// bind keys
 	$(document).on('keyup change', '[data-format="key"]', function(e){
 
-		var input = $(this);
+		var input = $(this),
+			parent = input.closest('.caldera-easy-rewrites-rule-segment');
+
+		if( e.key && e.key === '/' && this.value.length > 1 ){
+			input.val( this.value.substr(0,this.value.length-1) ).trigger('change');
+			if( !parent.next().length ){
+				parent.closest('.caldera-easy-rewrites-rule-wrapper').find('.add-new-segment').trigger('click');
+			}
+			return;
+		}
 
 		if( input.data('master') && input.prop('required') && this.value.length <= 0 && e.type === "change" ){
 			this.value = $(input.data('master')).val().replace(/[^a-z0-9_%@.]/gi, '-').toLowerCase();

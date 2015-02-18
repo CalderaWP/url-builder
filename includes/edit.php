@@ -5,7 +5,7 @@ global $wpdb;
 $caldera_easy_rewrites = get_option( '_caldera_easy_rewrites' );
 // load post types
 $post_type_args = array(
-	'rewrite'				=>	true,
+	'public' => true
 );
 
 $post_types = get_post_types( $post_type_args, 'objects' );
