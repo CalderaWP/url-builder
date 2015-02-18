@@ -24,6 +24,7 @@ jQuery( function($){
 
 			$( '.preview-type-' + type ).removeClass('warning').removeClass('danger').removeClass('success').find('.notice').remove();
 			
+			console.log( result.data[ type ] );
 
 			if( typeof result.data[ type ]['warning'] !== 'undefined' ){
 
@@ -32,7 +33,7 @@ jQuery( function($){
 
 			}else{
 				
-				if( result.data[ type ].length > 2 && typeof result.data[ type ][0]['attachment'] !== 'undefined' ){
+				if( result.data[ type ].length > 2 ){
 					// error
 					$( '.preview-type-' + type ).addClass('danger').append('<span class="notice">' + $('#rewrite-notice-error').html() + '</span>');					
 					for( var p = 0; p < result.data[ type ].length; p++ ){
@@ -57,7 +58,7 @@ jQuery( function($){
 					if( last ){
 						$( '.preview-type-' + type + ' .notice' ).append( ' & ' + last );
 					}
-				}else if( result.data[ type ].length === 2 && typeof result.data[ type ][0]['attachment'] === 'undefined' ){
+				}else if( result.data[ type ].length === 2 && typeof result.data[ type ][0]['attachment'] !== 'undefined' ){
 					$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + $('#rewrite-notice-warning').html() + '</span>');
 				}else{
 					// tis good
