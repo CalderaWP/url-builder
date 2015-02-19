@@ -10,7 +10,7 @@
  * Plugin Name: Caldera Easy Rewrites
  * Plugin URI:  
  * Description: Easily create custom rewrites for content types.
- * Version:     0.0.1
+ * Version:     0.1.0
  * Author:      CalderaWP <david@digilab.co.za>
  * Author URI:  http://calderawp.com/
  * Text Domain: caldera-easy-rewrites
@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 define('CEW_PATH',  plugin_dir_path( __FILE__ ) );
 define('CEW_URL',  plugin_dir_url( __FILE__ ) );
-define('CEW_VER',  '0.0.1' );
+define('CEW_VER',  '0.1.0' );
 
 
 
