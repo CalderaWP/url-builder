@@ -239,7 +239,7 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 		// This page will be under "Settings"
 		
 	
-			$this->plugin_screen_hook_suffix['caldera_easy_rewrites'] =  add_submenu_page( 'tools.php', __( 'Caldera Easy Rewrites', $this->plugin_slug ), __( 'Easy Rewrites', $this->plugin_slug ), 'manage_options', 'caldera_easy_rewrites', array( $this, 'create_admin_page' ) );
+			$this->plugin_screen_hook_suffix['caldera_easy_rewrites'] =  add_submenu_page( 'options-general.php', __( 'Caldera Easy Rewrites', $this->plugin_slug ), __( 'Easy Rewrites', $this->plugin_slug ), 'manage_options', 'caldera_easy_rewrites', array( $this, 'create_admin_page' ) );
 			add_action( 'admin_print_styles-' . $this->plugin_screen_hook_suffix['caldera_easy_rewrites'], array( $this, 'enqueue_admin_stylescripts' ) );
 
 

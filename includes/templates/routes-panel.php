@@ -79,6 +79,8 @@
 			{{#is type value="static"}}{{path}}{{/is}}</span>
 			<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>
 		{{/each}}
+			<span class="caldera-easy-rewrite-variable">&lcub;{{content_type}}_slug&rcub;</span>
+			<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>
 		</div>
 
 	{{else}}
