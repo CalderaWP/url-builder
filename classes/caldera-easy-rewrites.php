@@ -35,6 +35,15 @@ class Caldera_Easy_Rewrites {
 	protected $rule_structs = null;
 
 	/**
+	 * The saved rewrites
+	 *
+	 * @since 0.2.0
+	 *
+	 * @var array|bool
+	 */
+	protected $saved;
+
+	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
 	 */
@@ -56,6 +65,9 @@ class Caldera_Easy_Rewrites {
 		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 3 );
 		add_filter( 'post_link', array( $this, 'create_permalink' ), 1, 3 );
 		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
+
+		//get saved settings
+		$this->saved = get_option( '_caldera_easy_rewrites' );
 		
 	}
 
@@ -82,19 +94,25 @@ class Caldera_Easy_Rewrites {
 				$post_link = str_replace( '%postname%', $post->post_name, $post_link );
 			}
 		}
+
+		$rules = $this->rule_structs[ $post->post_type ];
 		
-		foreach( $this->rule_structs[ $post->post_type ] as $taxonomy=>$default ){
+		foreach( $rules as $node_id => $tax ){
+			$taxonomy = $tax[ 'taxonomy' ];
 			$terms = wp_get_post_terms( $post->ID, $taxonomy );
 			if( !is_wp_error( $terms ) && !empty( $terms ) ){
-				$default = $terms[0]->slug;
+				$value = $terms[0]->slug;
+			}else{
+				$value = $tax[ 'default' ];
 			}
 			
-			$post_link = str_replace( '/%' . $taxonomy .'%/', '/' . $default . '/', $post_link );
+			$post_link = str_replace( '/%' . $node_id .'%/', '/' . $value . '/', $post_link );
 		}
 
 		return $post_link;
 
 	}
+
 	/**
 	 * Return an instance of this class.
 	 *
@@ -110,7 +128,7 @@ class Caldera_Easy_Rewrites {
 
 		// load up the rules
 		if( empty( $test_config ) || true === $test_config ){
-			$rules = get_option( '_caldera_easy_rewrites' );
+			$rules = $this->saved;
 		}else{
 			$rules = $test_config;
 		}
@@ -134,8 +152,13 @@ class Caldera_Easy_Rewrites {
 							//$structure[] = '%' . $segment['taxonomy'] . '%';
 							$structure[] = '%' . $segment_id . '%';
 							add_rewrite_tag( '%' . $segment_id . '%', '([^&^/]+)', $segment['taxonomy'] . '=' );
+
 							//$this->rule_structs[ $rule['content_type'] ][ $segment['taxonomy'] ] = $segment['default'];
-							$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = $segment['default'];
+							//$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = $segment['default'];
+							$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = array(
+								'default' => $segment[ 'default' ],
+								'taxonomy' => $segment[ 'taxonomy' ],
+							);
 							
 							if( ( !empty( $test_config ) || true === $test_config ) && $first = true ){
 								$rule_list[ $rule['content_type'] ][] = '_root_warning_' . $segment['default'];
@@ -156,6 +179,7 @@ class Caldera_Easy_Rewrites {
 
 					$first = false;
 				}
+
 			}
 
 			if( $rule['content_type'] === 'post' ){

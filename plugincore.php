@@ -29,7 +29,6 @@ define('CEW_URL',  plugin_dir_url( __FILE__ ) );
 define('CEW_VER',  '0.1.0' );
 
 
-
 // load internals
 require_once( CEW_PATH . '/classes/caldera-easy-rewrites.php' );
 require_once( CEW_PATH . 'classes/magic-slugs.php' );
