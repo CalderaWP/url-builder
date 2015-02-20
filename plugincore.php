@@ -40,3 +40,19 @@ register_activation_hook( __FILE__, 'flush_rewrite_rules');
 
 // Load instance
 add_action( 'plugins_loaded', array( 'Caldera_Easy_Rewrites', 'get_instance' ) );
+
+
+/**
+ * Deactivation hook for this plugin.
+ *
+ * Flushes permalinks.
+ *
+ * @since 0.2.0
+ *
+ */
+register_deactivation_hook( __FILE__, 'cer_deactivate' );
+function cer_deactivate() {
+	global $wp_rewrites;
+	flush_rewrite_rules();
+
+}
