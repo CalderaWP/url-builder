@@ -1,8 +1,8 @@
 <?php
 /**
- * Caldera Easy Rewrites Options.
+ * Caldera URL Builder Options.
  *
- * @package   Caldera_Easy_Rewrites
+ * @package   Caldera_URL_Builder
  * @author    CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
  * @link
@@ -11,10 +11,10 @@
 
 /**
  * Plugin class.
- * @package Caldera_Easy_Rewrites
+ * @package Caldera_URL_Builder
  * @author  CalderaWP <david@digilab.co.za>
  */
-class Caldera_Easy_Rewrites_Options {
+class Caldera_URL_Builder_Options {
 
 	/**
 	 * The name of the plugin's main options
@@ -23,7 +23,7 @@ class Caldera_Easy_Rewrites_Options {
 	 *
 	 * @var string
 	 */
-	public static $option_name = '_caldera_easy_rewrites';
+	public static $option_name = '_caldera_url_builder';
 
 
 	/**

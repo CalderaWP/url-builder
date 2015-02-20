@@ -1,5 +1,5 @@
 <?php
 
-	// Panel template for Caldera Easy Rewrites
+	// Panel template for Caldera URL Builder
 
 ?>

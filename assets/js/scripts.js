@@ -1,20 +1,20 @@
 var caldera_easy_rewrites_canvas = false,
-	cew_get_config_object,
-	cew_record_change,
-	cew_canvas_init,
-	cew_get_default_setting,
+	cub_get_config_object,
+	cub_record_change,
+	cub_canvas_init,
+	cub_get_default_setting,
 	init_magic_tags,
-	cew_rebuild_magics,
+	cub_rebuild_magics,
 	config_object = {},
 	magic_tags = [],
-	cew_rebuild_results,
+	cub_rebuild_results,
 	content_types,
-	cew_initial_load = true;
+	cub_initial_load = true;
 
 jQuery( function($){
 
 
-	cew_rebuild_results = function( obj ){
+	cub_rebuild_results = function( obj ){
 
 		var result = obj.data, clashes = [];
 
@@ -67,10 +67,10 @@ jQuery( function($){
 
 			}
 		}
-		if( false === cew_initial_load ){
+		if( false === cub_initial_load ){
 			caldera_easy_rewrites_canvas = 'tested';			
 		}
-		cew_initial_load = false;
+		cub_initial_load = false;
 	}
 
 
@@ -97,7 +97,7 @@ jQuery( function($){
 				magictag.css('borderBottom', 'none');
 			}
 
-			if(input.hasClass('caldera-easy-rewrites-conditional-value-field')){
+			if(input.hasClass('caldera-url-builder-conditional-value-field')){
 				wrapper.width('auto');
 			}
 
@@ -114,22 +114,22 @@ jQuery( function($){
 	}
 
 	// internal function declarationas
-	cew_get_config_object = function(el, e){
+	cub_get_config_object = function(el, e){
 
 		e.preventDefault();
 		// new sync first
 		$('#caldera_easy_rewrites-id').trigger('change');
 		var clicked 	= $(el),
-			config 		= $('#caldera-easy-rewrites-live-config').val(),
+			config 		= $('#caldera-url-builder-live-config').val(),
 			required 	= $('.required'),
 			clean		= true;
 
 		for( var input = 0; input < required.length; input++ ){
 			if( required[input].value.length <= 0 && $( required[input] ).is(':visible') ){
-				$( required[input] ).addClass('caldera-easy-rewrites-input-error').focus();
+				$( required[input] ).addClass('caldera-url-builder-input-error').focus();
 				clean = false;
 			}else{
-				$( required[input] ).removeClass('caldera-easy-rewrites-input-error');
+				$( required[input] ).removeClass('caldera-url-builder-input-error');
 			}
 		}
 		if( clean ){
@@ -139,24 +139,24 @@ jQuery( function($){
 		return clean;
 	}
 
-	cew_record_change = function(){
+	cub_record_change = function(){
 		// hook and rebuild the fields list
 		jQuery(document).trigger('record_change');
 		jQuery('#caldera_easy_rewrites-id').trigger('change');
-		jQuery('#caldera-easy-rewrites-field-sync').trigger('refresh');
+		jQuery('#caldera-url-builder-field-sync').trigger('refresh');
 
 	}
 	
-	cew_canvas_init = function(){
+	cub_canvas_init = function(){
 
 		if( !caldera_easy_rewrites_canvas ){
 			// bind changes
-			jQuery('#caldera-easy-rewrites-main-canvas').on('keydown keyup change','input, select, textarea', function(e) {
-				config_object = jQuery('#caldera-easy-rewrites-main-form').formJSON(); // perhaps load into memory to keep it live.
-				jQuery('#caldera-easy-rewrites-live-config').val( JSON.stringify( config_object ) ).trigger('change');
+			jQuery('#caldera-url-builder-main-canvas').on('keydown keyup change','input, select, textarea', function(e) {
+				config_object = jQuery('#caldera-url-builder-main-form').formJSON(); // perhaps load into memory to keep it live.
+				jQuery('#caldera-url-builder-live-config').val( JSON.stringify( config_object ) ).trigger('change');
 			});
 
-			caldera_easy_rewrites_canvas = jQuery('#caldera-easy-rewrites-live-config').val();
+			caldera_easy_rewrites_canvas = jQuery('#caldera-url-builder-live-config').val();
 			config_object = JSON.parse( caldera_easy_rewrites_canvas ); // perhaps load into memory to keep it live.
 		}
 		if( $('.color-field').length ){
@@ -166,14 +166,14 @@ jQuery( function($){
 				}
 			});
 		}
-		if( $('.caldera-easy-rewrites-group-wrapper').length ){
-			$( ".caldera-easy-rewrites-group-wrapper" ).sortable({
+		if( $('.caldera-url-builder-group-wrapper').length ){
+			$( ".caldera-url-builder-group-wrapper" ).sortable({
 				handle: ".dashicons-sort",
 				update: function(){
 					jQuery('#caldera_easy_rewrites-id').trigger('change');
 				}
 			});
-			$( ".caldera-easy-rewrites-fields-list" ).sortable({
+			$( ".caldera-url-builder-fields-list" ).sortable({
 				handle: ".dashicons-sort",
 				update: function(){
 					jQuery('#caldera_easy_rewrites-id').trigger('change');
@@ -183,15 +183,15 @@ jQuery( function($){
 		// live change init
 		$('[data-init-change]').trigger('change');
 		// rebuild tags
-		cew_rebuild_magics();
+		cub_rebuild_magics();
 		jQuery(document).trigger('canvas_init');
-		jQuery( '#caldera-easy-rewrites-test-rules').trigger('testlines');
+		jQuery( '#caldera-url-builder-test-rules').trigger('testlines');
 	}
-	cew_get_default_setting = function(obj){
+	cub_get_default_setting = function(obj){
 
 		var id = 'node_' + Math.round(Math.random() * 99887766) + '_' + Math.round(Math.random() * 99887766),
 			new_object = {},
-			config_object = JSON.parse( jQuery('#caldera-easy-rewrites-live-config').val() ), // perhaps load into memory to keep it live.
+			config_object = JSON.parse( jQuery('#caldera-url-builder-live-config').val() ), // perhaps load into memory to keep it live.
 			trigger = ( obj.trigger ? obj.trigger : obj.params.trigger ),
 			sub_id = ( trigger.data('group') ? trigger.data('group') : 'node_' + Math.round(Math.random() * 99887766) + '_' + Math.round(Math.random() * 99887766) ),
 			nodes;
@@ -256,9 +256,9 @@ jQuery( function($){
 		}
 
 
-		jQuery('#caldera-easy-rewrites-live-config').val( JSON.stringify( config_object ) );
-		jQuery('#caldera-easy-rewrites-field-sync').trigger('refresh');
-		cew_record_change();
+		jQuery('#caldera-url-builder-live-config').val( JSON.stringify( config_object ) );
+		jQuery('#caldera-url-builder-field-sync').trigger('refresh');
+		cub_record_change();
 	}
 	// sutocomplete category
 	$.widget( "custom.catcomplete", $.ui.autocomplete, {
@@ -282,7 +282,7 @@ jQuery( function($){
 			});
 		}
 	});
-	cew_rebuild_magics = function(){
+	cub_rebuild_magics = function(){
 
 		function split( val ) {
 			return val.split( / \s*/ );
@@ -306,7 +306,7 @@ jQuery( function($){
 					var system_tags = [
 						'autocomplete_item',
 					];					
-					category = $('#caldera-easy-rewrites-label-tags').text();
+					category = $('#caldera-url-builder-label-tags').text();
 					for( f = 0; f < system_tags.length; f++ ){
 						magic_tags.push( { label: '{' + system_tags[f] + '}', category: category }  );
 					}							
@@ -333,9 +333,9 @@ jQuery( function($){
 	}	
 
 	// trash 
-	$(document).on('click', '.caldera-easy-rewrites-card-actions .confirm a', function(e){
+	$(document).on('click', '.caldera-url-builder-card-actions .confirm a', function(e){
 		e.preventDefault();
-		var parent = $(this).closest('.caldera-easy-rewrites-card-content');
+		var parent = $(this).closest('.caldera-url-builder-card-content');
 			actions = parent.find('.row-actions');
 
 		actions.slideToggle(300);
@@ -360,12 +360,12 @@ jQuery( function($){
 	$(document).on('keyup change', '[data-format="key"]', function(e){
 
 		var input = $(this),
-			parent = input.closest('.caldera-easy-rewrites-rule-segment');
+			parent = input.closest('.caldera-url-builder-rule-segment');
 
 		if( e.key && e.key === '/' && this.value.length > 1 ){
 			input.val( this.value.substr(0,this.value.length-1) ).trigger('change');
 			if( !parent.next().length ){
-				parent.closest('.caldera-easy-rewrites-rule-wrapper').find('.add-new-segment').trigger('click');
+				parent.closest('.caldera-url-builder-rule-wrapper').find('.add-new-segment').trigger('click');
 			}
 			return;
 		}
@@ -410,7 +410,7 @@ jQuery( function($){
 				}else{
 					tog.prop('checked', true);
 				}
-				cew_record_change();
+				cub_record_change();
 			}else{
 				tog.toggle();
 			}
@@ -419,7 +419,7 @@ jQuery( function($){
 	});	
 
 	// bind tabs
-	$(document).on('click', '.caldera-easy-rewrites-nav-tabs a', function(e){
+	$(document).on('click', '.caldera-url-builder-nav-tabs a', function(e){
 		
 		e.preventDefault();
 		var clicked 	= $(this),
@@ -429,18 +429,18 @@ jQuery( function($){
 
 		for( var input = 0; input < required.length; input++ ){
 			if( required[input].value.length <= 0 && $( required[input] ).is(':visible') ){
-				$( required[input] ).addClass('caldera-easy-rewrites-input-error');
+				$( required[input] ).addClass('caldera-url-builder-input-error');
 				clean = false;
 			}else{
-				$( required[input] ).removeClass('caldera-easy-rewrites-input-error');
+				$( required[input] ).removeClass('caldera-url-builder-input-error');
 			}
 		}
 		if( !clean ){
 			return;
 		}
-		$('.caldera-easy-rewrites-nav-tabs .current').removeClass('current');
-		$('.caldera-easy-rewrites-nav-tabs .active').removeClass('active');
-		$('.caldera-easy-rewrites-nav-tabs .nav-tab-active').removeClass('nav-tab-active');
+		$('.caldera-url-builder-nav-tabs .current').removeClass('current');
+		$('.caldera-url-builder-nav-tabs .active').removeClass('active');
+		$('.caldera-url-builder-nav-tabs .nav-tab-active').removeClass('nav-tab-active');
 		if( clicked.parent().is('li') ){
 			clicked.parent().addClass('active');			
 		}else if( clicked.parent().is('div') ){
@@ -450,11 +450,11 @@ jQuery( function($){
 		}
 		
 
-		$('.caldera-easy-rewrites-editor-panel').hide();
+		$('.caldera-url-builder-editor-panel').hide();
 		$( tab_id ).show();
 		
 
-		jQuery('#caldera-easy-rewrites-active-tab').val(tab_id).trigger('change');
+		jQuery('#caldera-url-builder-active-tab').val(tab_id).trigger('change');
 
 	});
 
@@ -468,7 +468,7 @@ jQuery( function($){
 			}
 		}
 		parent.remove();
-		cew_record_change();		
+		cub_record_change();
 	});
 	
 	// init tags
@@ -482,7 +482,7 @@ jQuery( function($){
 	
 	// initialize live sync rebuild
 	$(document).on('change', '[data-live-sync]', function(e){
-		cew_record_change();
+		cub_record_change();
 		
 	});
 
@@ -495,7 +495,7 @@ jQuery( function($){
 
 	window.onbeforeunload = function(e) {
 
-		if( caldera_easy_rewrites_canvas && caldera_easy_rewrites_canvas !== jQuery('#caldera-easy-rewrites-live-config').val() ){
+		if( caldera_easy_rewrites_canvas && caldera_easy_rewrites_canvas !== jQuery('#caldera-url-builder-live-config').val() ){
 			return true;
 		}
 	};

@@ -6,19 +6,19 @@
 
 
 {{#each rewrite}}
-<div class="caldera-easy-rewrites-rule-wrapper">
+<div class="caldera-url-builder-rule-wrapper">
 	<input type="hidden" name="rewrite[{{_id}}][_id]" value="{{_id}}">
-	<button type="button" class="button" data-remove-parent=".caldera-easy-rewrites-rule-wrapper" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&times;</button>
+	<button type="button" class="button" data-remove-parent=".caldera-url-builder-rule-wrapper" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&times;</button>
 	{{#if content_type}}
 		<input type="hidden" name="used_types[{{content_type}}]" value="{{content_type}}">
 		<input type="hidden" name="rewrite[{{_id}}][content_type]" value="{{content_type}}">
-		<span class="caldera-easy-rewrites-segment-slug">{{content_type}}</span>
-		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">:</span>
+		<span class="caldera-url-builder-segment-slug">{{content_type}}</span>
+		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">:</span>
 		<input type="hidden" name="rewrite[{{_id}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}" data-format="key" data-sync="#preview-slug-{{_id}}" required>
-		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> 
-		<span class="caldera-easy-rewrites-segment-list">
+		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
+		<span class="caldera-url-builder-segment-list">
 			{{#each segment}}
-			<span class="caldera-easy-rewrites-rule-segment">
+			<span class="caldera-url-builder-rule-segment">
 				
 				<input type="hidden" name="rewrite[{{../_id}}][segment][{{_id}}][_id]" value="{{_id}}">
 
@@ -26,10 +26,10 @@
 					<option></option>
 					{{#find ../../../content_types ../../content_type}}
 						{{#if taxonomies}}
-						<option value="taxonomy" {{#is ../../type value="taxonomy"}}selected="selected"{{/is}}><?php _e( 'Taxonomy', 'caldera-easy-rewrites' ); ?></option>
+						<option value="taxonomy" {{#is ../../type value="taxonomy"}}selected="selected"{{/is}}><?php _e( 'Taxonomy', 'caldera-url-builder' ); ?></option>
 						{{/if}}
 					{{/find}}
-					<option value="static" {{#is type value="static"}}selected="selected"{{/is}}><?php _e( 'Static String', 'caldera-easy-rewrites' ); ?></option>
+					<option value="static" {{#is type value="static"}}selected="selected"{{/is}}><?php _e( 'Static String', 'caldera-url-builder' ); ?></option>
 				</select>
 
 				{{#is type value="taxonomy"}}
@@ -46,8 +46,8 @@
 						
 						{{#find taxonomies ../taxonomy}}
 							
-							<select data-live-sync="true" name="rewrite[{{../../../../_id}}][segment][{{../../../_id}}][default]" style="vertical-align: unset; margin-left: -5px;" placeholder="<?php _e( 'Default', 'caldera-easy-rewrites' ); ?>">
-								<option value="" disabled><?php _e( 'Select Default', 'caldera-easy-rewrites' ); ?></option>
+							<select data-live-sync="true" name="rewrite[{{../../../../_id}}][segment][{{../../../_id}}][default]" style="vertical-align: unset; margin-left: -5px;" placeholder="<?php _e( 'Default', 'caldera-url-builder' ); ?>">
+								<option value="" disabled><?php _e( 'Select Default', 'caldera-url-builder' ); ?></option>
 								{{#each terms}}
 									<option value="{{slug}}" {{#is ../../../default value="slug"}}selected="selected"{{/is}}>{{slug}}</option>
 								{{/each}}
@@ -62,25 +62,25 @@
 					<input type="text" name="rewrite[{{../../_id}}][segment][{{_id}}][path]" value="{{path}}" data-sync="#preview-segment-{{_id}}" data-live-sync="true" data-format="key" class="required">
 				{{/is}}
 
-				<button dlass="caldera-easy-rewrites-remove-segment" style="display: inline; font-size: 17px; padding: 0px 5px; border-radius: 0px 4px 4px 0px; margin: 1px 2px 0px -6px;" type="button" class="button" data-remove-parent=".caldera-easy-rewrites-rule-segment">&times;</button>
-				<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> 
+				<button dlass="caldera-url-builder-remove-segment" style="display: inline; font-size: 17px; padding: 0px 5px; border-radius: 0px 4px 4px 0px; margin: 1px 2px 0px -6px;" type="button" class="button" data-remove-parent=".caldera-url-builder-rule-segment">&times;</button>
+				<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
 			</span>
 			{{/each}}
 		</span>
-		<button type="button" {{#unless segment}}data-autoload="true"{{/unless}} class="button add-new-segment wp-baldrick" data-request="cew_get_default_setting" type="button" data-script="add-segment" data-node="{{_id}}" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&plus;</button> 
+		<button type="button" {{#unless segment}}data-autoload="true"{{/unless}} class="button add-new-segment wp-baldrick" data-request="cub_get_default_setting" type="button" data-script="add-segment" data-node="{{_id}}" style="font-size: 17px; padding: 0px 9px; margin: 1px 4px 0px 0px;">&plus;</button>
 
-		<div class="caldera-easy-rewrites-segment-preview preview-type-{{content_type}}">
-		<?php echo site_url( ); ?> <span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>
+		<div class="caldera-url-builder-segment-preview preview-type-{{content_type}}">
+		<?php echo site_url( ); ?> <span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
 		<?php /*<span id="preview-slug-{{_id}}">{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}</span>
-		<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span> */ ?>
+		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span> */ ?>
 		{{#each segment}}
 			<span id="preview-segment-{{_id}}">
 			{{#is type value="taxonomy"}}<span class="caldera-easy-rewrite-variable">&lcub;{{taxonomy}}&rcub;</span>{{/is}}
 			{{#is type value="static"}}{{path}}{{/is}}</span>
-			<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>
+			<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
 		{{/each}}
 			<span class="caldera-easy-rewrite-variable">&lcub;{{content_type}}_slug&rcub;</span>
-			<span class="caldera-easy-rewrites-segment" style="color: rgb(159, 159, 159);">/</span>
+			<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
 		</div>
 
 	{{else}}
@@ -101,11 +101,11 @@
 {{/each}}
 
 <hr>
-<button id="caldera-easy-rewrite-add-rule-button" type="button" class="button wp-baldrick" data-request="cew_get_default_setting" type="button" data-add-node="rewrite"><?php _e( 'Add Rule', 'caldera-easy-rewrites' ); ?></button>
+<button id="caldera-easy-rewrite-add-rule-button" type="button" class="button wp-baldrick" data-request="cub_get_default_setting" type="button" data-add-node="rewrite"><?php _e( 'Add Rule', 'caldera-url-builder' ); ?></button>
 
-<div id="rewrite-notice-error" style="display:none;"><?php _e('Rewrite clashes with: ', 'caldera-easy-rewrites'); ?></div>
-<div id="rewrite-notice-success" style="display:none;"><?php _e('Looks good!', 'caldera-easy-rewrites'); ?></div>
-<div id="rewrite-notice-warning" style="display:none;"><?php _e('Looks good, but will clash with "attachments".', 'caldera-easy-rewrites'); ?></div>
+<div id="rewrite-notice-error" style="display:none;"><?php _e('Rewrite clashes with: ', 'caldera-url-builder'); ?></div>
+<div id="rewrite-notice-success" style="display:none;"><?php _e('Looks good!', 'caldera-url-builder'); ?></div>
+<div id="rewrite-notice-warning" style="display:none;"><?php _e('Looks good, but will clash with "attachments".', 'caldera-url-builder'); ?></div>
 
 {{#script}}
 if( jQuery('.caldera-easy-rewrite-new-rule-select').length ){

@@ -1,8 +1,8 @@
 <?php
 /**
- * Caldera Easy Rewrites.
+ * Caldera URL Builder Main Class
  *
- * @package   Caldera_Easy_Rewrites
+ * @package   Caldera_URL_Builder
  * @author    CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
  * @link      
@@ -11,15 +11,15 @@
 
 /**
  * Plugin class.
- * @package Caldera_Easy_Rewrites
+ * @package Caldera_URL_Builder
  * @author  CalderaWP <david@digilab.co.za>
  */
-class Caldera_Easy_Rewrites {
+class Caldera_URL_Builder {
 
 	/**
 	 * @var      string
 	 */
-	protected $plugin_slug = 'caldera-easy-rewrites';
+	protected $plugin_slug = 'caldera-url-builder';
 	/**
 	 * @var      object
 	 */
@@ -67,7 +67,7 @@ class Caldera_Easy_Rewrites {
 		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
 
 		//get saved settings
-		$this->saved = Caldera_Easy_Rewrites_Options::get_all();
+		$this->saved = Caldera_URL_Builder_Options::get_all();
 		
 	}
 
@@ -230,7 +230,7 @@ class Caldera_Easy_Rewrites {
 	 */
 	public function load_plugin_textdomain() {
 
-		load_plugin_textdomain( $this->plugin_slug, FALSE, basename( CEW_PATH ) . '/languages');
+		load_plugin_textdomain( $this->plugin_slug, FALSE, basename( CUB_PATH ) . '/languages');
 
 	}
 	
@@ -245,14 +245,14 @@ class Caldera_Easy_Rewrites {
 		$screen = get_current_screen();
 
 		
-		if( false !== strpos( $screen->base, 'caldera_easy_rewrites' ) ){
+		if( false !== strpos( $screen->base, 'caldera_url_builder' ) ){
 
-			wp_enqueue_style( 'caldera_easy_rewrites-core-style', CEW_URL . '/assets/css/styles.css' );
-			wp_enqueue_style( 'caldera_easy_rewrites-baldrick-modals', CEW_URL . '/assets/css/modals.css' );
-			wp_enqueue_script( 'caldera_easy_rewrites-wp-baldrick', CEW_URL . '/assets/js/wp-baldrick-full.js', array( 'jquery' ) , false, true );
+			wp_enqueue_style( 'caldera_url_builder-core-style', CUB_URL . '/assets/css/styles.css' );
+			wp_enqueue_style( 'caldera_url_builder-baldrick-modals', CUB_URL . '/assets/css/modals.css' );
+			wp_enqueue_script( 'caldera_url_builder-wp-baldrick', CUB_URL . '/assets/js/wp-baldrick-full.js', array( 'jquery' ) , false, true );
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
 			wp_enqueue_script( 'jquery-ui-sortable' );
-			wp_enqueue_script( 'caldera_easy_rewrites-core-script', CEW_URL . '/assets/js/scripts.js', array( 'caldera_easy_rewrites-wp-baldrick' ) , false );
+			wp_enqueue_script( 'caldera_url_builder-core-script', CUB_URL . '/assets/js/scripts.js', array( 'caldera_url_builder-wp-baldrick' ) , false );
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );			
 		
