@@ -67,7 +67,7 @@ class Caldera_Easy_Rewrites {
 		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
 
 		//get saved settings
-		$this->saved = get_option( '_caldera_easy_rewrites' );
+		$this->saved = Caldera_Easy_Rewrites_Options::get_all();
 		
 	}
 

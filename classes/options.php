@@ -16,9 +16,20 @@
  */
 class Caldera_Easy_Rewrites_Options {
 
+	/**
+	 * The name of the plugin's main options
+	 *
+	 * @since 0.0.1
+	 *
+	 * @var string
+	 */
+	public static $option_name = '_caldera_easy_rewrites';
+
 
 	/**
 	 * Get an option from this plugin.
+	 *
+	 * @since 0.0.1
 	 *
 	 * @param string $option The name of a specific option to get.
 	 * @param mixed $default Optional. Default to return if no value found. Default is false.
@@ -44,15 +55,19 @@ class Caldera_Easy_Rewrites_Options {
 	/**
 	 * Get all option from this plugin.
 	 *
+	 * @since 0.0.1
+	 *
 	 * @return null|array Returns the options or null if none are set
 	 */
-	public static function get_all (  ) {
+	public static function get_all ( ) {
 		return self::get_options( null );
 
 	}
 
 	/**
 	 * Get an option or all option from this plugin
+	 *
+	 * @since 0.0.1
 	 *
 	 * @access private
 	 *
@@ -61,7 +76,7 @@ class Caldera_Easy_Rewrites_Options {
 	 * @return array|null|string
 	 */
 	private static function get_options( $option = null ) {
-		$options = get_option( "_caldera_easy_rewrites", array() );
+		$options = get_option( self::$option_name, array() );
 		if ( empty( $options ) ) {
 			return $options;
 
@@ -79,6 +94,28 @@ class Caldera_Easy_Rewrites_Options {
 		}
 
 		return $options;
+
+	}
+
+	/**
+	 * Clear this plugin's saved config.
+	 *
+	 * @since 0.2.0
+	 */
+	public static function clear() {
+		delete_option( self::$option_name );
+
+	}
+
+	/**
+	 * Save this plugin's options
+	 *
+	 * @since 0.2.0
+	 *
+	 * @param array $config The configuration to save.
+	 */
+	public static function save( $config ) {
+		update_option( self::$option_name, $config );
 
 	}
 
