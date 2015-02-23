@@ -2,7 +2,7 @@
 /**
  * Handles sanitizion of settings
  *
- * @package Caldera_Easy_Rewrites
+ * @package Caldera_URL_Builder
  * @author  CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
  * @link
@@ -11,10 +11,10 @@
 
 /**
  * Plugin class.
- * @package Caldera_Easy_Rewrites
+ * @package Caldera_URL_Builder
  * @author  CalderaWP <david@digilab.co.za>
  */
-class Settings_Caldera_Easy_Rewrites_Sanitize {
+class Settings_Caldera_URL_Builder_Sanitize {
 
 	/**
 	 * Prepares for application of the sanization and/ or validation filter based on setting type
@@ -29,7 +29,7 @@ class Settings_Caldera_Easy_Rewrites_Sanitize {
 	 */
 	public static function apply_sanitization_and_validation( $setting, $value, $config ) {
 
-		$stored = Caldera_Easy_Rewrites_Options::get_all();
+		$stored = Caldera_URL_Builder_Options::get_all();
 		// check value exists and if its changed
 		if ( isset( $stored[ $setting ] ) && $value == $stored[ $setting ] ) {
 			return $config;

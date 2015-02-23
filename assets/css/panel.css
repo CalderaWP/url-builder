@@ -8,7 +8,7 @@
 /* {margin:0;padding:0;}*/
 
 
-.caldera-easy-rewrites-modal-content {
+.caldera-url-builder-modal-content {
   background: none repeat scroll 0 0 #FFFFFF;
   bottom: 0;
   left: 0;
@@ -21,13 +21,13 @@
   top: 0;
   width: 100%;
 }
-.caldera-easy-rewrites-options-form {
+.caldera-url-builder-options-form {
   position: relative;
 }
-.caldera-easy-rewrites-options-form .submit {
+.caldera-url-builder-options-form .submit {
   clear: both;
 }
-.caldera-easy-rewrites-settings-config-content {
+.caldera-url-builder-settings-config-content {
   background-color: #fff;
   padding-right: 10px;
   width: 450px;
@@ -36,70 +36,70 @@
   position: inherit;
   float: left;
 }
-.caldera-easy-rewrites-settings-config-content.full{
+.caldera-url-builder-settings-config-content.full{
   margin-left: 0;
   border-left: 0;
   padding-left: 0;
   width: 500px;
 }
-.caldera-easy-rewrites_widget_label,.caldera-easy-rewrites_settings_label {
+.caldera-url-builder_widget_label,.caldera-url-builder_settings_label {
   cursor: pointer;
   display: inline-block;
   min-width: 80px;
 }
-.caldera-easy-rewrites-metabox-config-content {
+.caldera-url-builder-metabox-config-content {
   margin-left: 122px;
   border-left: 1px solid #F5F5F5;
   padding-left: 10px;
 }
-.caldera-easy-rewrites-metabox-config-content.full{
+.caldera-url-builder-metabox-config-content.full{
   margin-left: 0;
   border-left: 0;
   padding-left: 0;
 }
-.meta-box-sortables .caldera-easy-rewrites-metabox-config-content select {
+.meta-box-sortables .caldera-url-builder-metabox-config-content select {
   max-width: 100%;
   width: 100%;
 }
-.caldera-easy-rewrites-widget-config-content {
+.caldera-url-builder-widget-config-content {
   margin-left: 130px;
   max-height: 500px;
   max-height: 500px;
   overflow: auto;
   width: 363px;
 }
-.customize-control .caldera-easy-rewrites-widget-config-content{
+.customize-control .caldera-url-builder-widget-config-content{
   height: 500px;
 }
-.caldera-easy-rewrites-widget-config-content.full {
+.caldera-url-builder-widget-config-content.full {
   margin-left: -9px;
   max-height: 100%;
   overflow: visible;
   width: auto;
 }
-.caldera-easy-rewrites-settings-config-content h3 ,
-.caldera-easy-rewrites-metabox-config-content h3 ,
-.caldera-easy-rewrites-widget-config-content h3 {
+.caldera-url-builder-settings-config-content h3 ,
+.caldera-url-builder-metabox-config-content h3 ,
+.caldera-url-builder-widget-config-content h3 {
   border-bottom: 1px solid #DFDFDF;
   font-weight: normal;
   margin: 0 0 10px 0;
   padding: 10px 0 5px;
 }
-.caldera-easy-rewrites-metabox-config-content h3.metaheader {
+.caldera-url-builder-metabox-config-content h3.metaheader {
   padding: 7px 0 !important;
   font-weight: bold;
   cursor: default !important;
 }
-.caldera-easy-rewrites-groupbox {
+.caldera-url-builder-groupbox {
   padding: 1px 0 0 10px;
 }
-.caldera-easy-rewrites-field-row {
+.caldera-url-builder-field-row {
   margin: 0 0 15px 0;
 }
-.full .caldera-easy-rewrites-groupbox {
+.full .caldera-url-builder-groupbox {
   border: none;
 }
-.caldera-easy-rewrites-groupbox .groupitems {
+.caldera-url-builder-groupbox .groupitems {
   margin-bottom: 5px;
   position: relative;
 }
@@ -108,7 +108,7 @@
   border-bottom: 1px solid #DFDFDF;
   margin: 10px 0 5px;
 }
-.caldera-easy-rewrites-modal-modal {
+.caldera-url-builder-modal-modal {
   bottom: 30px;
   left: 30px;
   position: fixed;
@@ -116,7 +116,7 @@
   top: 30px;
   z-index: 159995;
 }
-.caldera-easy-rewrites-modal-footer {
+.caldera-url-builder-modal-footer {
   background-color: #F1F1F1;
   border-top: 1px solid #E1E1E1;
   bottom: 0;
@@ -126,22 +126,22 @@
   right: 0;
   text-align: right;
 }
-.caldera-easy-rewrites-modal-header > h2 {
+.caldera-url-builder-modal-header > h2 {
   border-bottom: 1px solid #EFEFEF;
   font-weight: 300;
   margin: 0 0 5px;
   padding: 0 0 10px;
 }
-.caldera-easy-rewrites-modal-header > h2 small{
+.caldera-url-builder-modal-header > h2 small{
   font-size: 14px;
   color: #BCBCBC;
 }
-.caldera-easy-rewrites-shortcode-name {
+.caldera-url-builder-shortcode-name {
   font-weight: 300;
   margin: 0 0 5px;
   padding: 3px 0 10px 1px; 
 }
-.caldera-easy-rewrites-shortcode-config {
+.caldera-url-builder-shortcode-config {
   border-top: 1px solid #EFEFEF;
   bottom: 50px;
   left: 15px;
@@ -150,7 +150,7 @@
   top: 85px;
 }
 
-.caldera-easy-rewrites-shortcode-config-content {
+.caldera-url-builder-shortcode-config-content {
   border-left: 1px solid #EFEFEF;
   bottom: 0;
   overflow: auto;
@@ -160,125 +160,125 @@
   top: 0;
   width: 495px;
 }
-h3.caldera-easy-rewrites-config-header{
+h3.caldera-url-builder-config-header{
   border-bottom: 1px solid #F5F5F5;
   font-weight: 300;
   margin: 7px 0;
   padding-bottom: 7px;  
 }
 
-.caldera-easy-rewrites-settings-config-nav {
+.caldera-url-builder-settings-config-nav {
   float: left;
   margin-left: -22px;
   top: 0;
   width: 170px;
 }
-.caldera-easy-rewrites-widget-config-nav {
+.caldera-url-builder-widget-config-nav {
   bottom: 0;
   left: -15px;
   position: absolute;
   top: 0;
   width: 145px;
 }
-.caldera-easy-rewrites-shortcode-config-nav,
-.caldera-easy-rewrites-metabox-config-nav {
+.caldera-url-builder-shortcode-config-nav,
+.caldera-url-builder-metabox-config-nav {
   bottom: 0;
   left: 0;
   position: absolute;
   top: 0;
   width: 145px;
 }
-.caldera-easy-rewrites-metabox-config-nav {
+.caldera-url-builder-metabox-config-nav {
   width: 135px;
 }
-.caldera-easy-rewrites-settings-config-nav > ul,
-.caldera-easy-rewrites-widget-config-nav > ul,
-.caldera-easy-rewrites-metabox-config-nav > ul,
-.caldera-easy-rewrites-shortcode-config-nav > ul {
+.caldera-url-builder-settings-config-nav > ul,
+.caldera-url-builder-widget-config-nav > ul,
+.caldera-url-builder-metabox-config-nav > ul,
+.caldera-url-builder-shortcode-config-nav > ul {
   margin: 5px 0 0;
 }
-.caldera-easy-rewrites-settings-config-nav a,
-.caldera-easy-rewrites-widget-config-nav a,
-.caldera-easy-rewrites-metabox-config-nav a,
-.caldera-easy-rewrites-shortcode-config-nav a {
+.caldera-url-builder-settings-config-nav a,
+.caldera-url-builder-widget-config-nav a,
+.caldera-url-builder-metabox-config-nav a,
+.caldera-url-builder-shortcode-config-nav a {
   display: block;
   font-weight: 300;
   padding: 7px 0 6px 15px;
   text-decoration: none;
 }
-.caldera-easy-rewrites-settings-config-nav a {
+.caldera-url-builder-settings-config-nav a {
   padding: 7px 0 6px 22px;
 }
-.caldera-easy-rewrites-settings-config-nav li,
-.caldera-easy-rewrites-widget-config-nav li,
-.caldera-easy-rewrites-metabox-config-nav li,
-.caldera-easy-rewrites-shortcode-config-nav li {
+.caldera-url-builder-settings-config-nav li,
+.caldera-url-builder-widget-config-nav li,
+.caldera-url-builder-metabox-config-nav li,
+.caldera-url-builder-shortcode-config-nav li {
   margin: 0;
 }
-.caldera-easy-rewrites-shortcode-config-nav li.current {
+.caldera-url-builder-shortcode-config-nav li.current {
   background: none repeat scroll 0 0 #efefef;
 }
-.caldera-easy-rewrites-settings-config-nav li.current{
+.caldera-url-builder-settings-config-nav li.current{
   background: none repeat scroll 0 0 #fff;
 }
-.caldera-easy-rewrites-metabox-config-nav li.current,
-.caldera-easy-rewrites-widget-config-nav li.current {
+.caldera-url-builder-metabox-config-nav li.current,
+.caldera-url-builder-widget-config-nav li.current {
   background: none repeat scroll 0 0 #f5f5f5;
   box-shadow: none;
 }
-.caldera-easy-rewrites-shortcode-config-content .rowGroup {
+.caldera-url-builder-shortcode-config-content .rowGroup {
   border-bottom: 1px dashed #EFEFEF;
   margin: 0 0 10px;
 }
-.caldera-easy-rewrites-addRow {
+.caldera-url-builder-addRow {
   padding: 5px 0 10px;
 }
 .toolrow {
   margin-bottom: 5px;
 }
-.caldera-easy-rewrites-shortcode-config-content .form-table th {
+.caldera-url-builder-shortcode-config-content .form-table th {
   width: 100px;
 }
-.caldera-easy-rewrites-shortcode-config-content input.regular-text {
+.caldera-url-builder-shortcode-config-content input.regular-text {
   width: 23em;
 }
-.caldera-easy-rewrites-shortcode-config-content textarea.regular-text.full,
-.caldera-easy-rewrites-shortcode-config-content input.regular-text.full {
+.caldera-url-builder-shortcode-config-content textarea.regular-text.full,
+.caldera-url-builder-shortcode-config-content input.regular-text.full {
   width: 99%;
 }
-.caldera-easy-rewrites-settings-config-content label {
+.caldera-url-builder-settings-config-content label {
   margin: 0 0 3px;
 }
-#side-sortables .caldera-easy-rewrites-metabox-config-content{
+#side-sortables .caldera-url-builder-metabox-config-content{
   margin-left: 0;
   border-left: 0;
   padding-left: 0;
 }
 
 @media only screen and (min-width: 850px) {
-  #side-sortables .caldera-easy-rewrites-metabox-config-nav {
+  #side-sortables .caldera-url-builder-metabox-config-nav {
     clear: both;
     position: relative;
     width: 100%;
   }
-  #side-sortables .caldera-easy-rewrites-metabox-config-nav li{
+  #side-sortables .caldera-url-builder-metabox-config-nav li{
     display: inline-block;
     width: auto;
   }
-  #side-sortables .caldera-easy-rewrites-metabox-config-nav li a{
+  #side-sortables .caldera-url-builder-metabox-config-nav li a{
     padding-right: 15px;
   }
-  #side-sortables .caldera-easy-rewrites-metabox-config-content .metaheader{
+  #side-sortables .caldera-url-builder-metabox-config-content .metaheader{
     display: none;
   }
-  #side-sortables .caldera-easy-rewrites-metabox-config-nav {
+  #side-sortables .caldera-url-builder-metabox-config-nav {
     border-bottom: 1px solid #EFEFEF;
     }
-  #side-sortables .caldera-easy-rewrites-metabox-config-content.group {
+  #side-sortables .caldera-url-builder-metabox-config-content.group {
     margin: 0;
   }
-  #side-sortables .caldera-easy-rewrites-metabox-config-content.group table th,
-  #side-sortables .caldera-easy-rewrites-metabox-config-content.group table td {
+  #side-sortables .caldera-url-builder-metabox-config-content.group table th,
+  #side-sortables .caldera-url-builder-metabox-config-content.group table td {
     display: inline-block;
     min-width: 70px;
     width: auto;
@@ -286,8 +286,8 @@ h3.caldera-easy-rewrites-config-header{
   }
 }
 @media only screen and (max-width: 850px) {
-  #side-sortables .caldera-easy-rewrites-metabox-config-content.group table th,
-  #side-sortables .caldera-easy-rewrites-metabox-config-content.group table td {
+  #side-sortables .caldera-url-builder-metabox-config-content.group table th,
+  #side-sortables .caldera-url-builder-metabox-config-content.group table td {
     display: inline-block;
     min-width: 170px;
     height: 30px;
@@ -555,7 +555,7 @@ img.filepreview {
   top: 49px;
   left: 0;
 }
-.filechanger-btn.caldera-easy-rewrites_uploader {
+.filechanger-btn.caldera-url-builder_uploader {
     margin-left: 10px;
 }
 

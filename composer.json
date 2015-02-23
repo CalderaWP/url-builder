@@ -1,5 +1,5 @@
 {
-  "name" : "calderawp/caldera-easy-rewrites",
+  "name" : "calderawp/caldera-url-builder",
   "description" : "Visual WordPress permalink customizer.",
   "type" : "wordpress-plugin",
   "keywords" : [ "wordpress", "rewrites", "caldera" ],

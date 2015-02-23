@@ -1,8 +1,8 @@
 <?php
 /**
- * Caldera Easy Rewrites Setting.
+ * Caldera URL Builder Setting.
  *
- * @package   Caldera_Easy_Rewrites
+ * @package   Caldera_URL_Builder
  * @author    CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
  * @link
@@ -11,10 +11,10 @@
 
 /**
  * Plugin class.
- * @package Caldera_Easy_Rewrites
+ * @package Caldera_URL_Builder
  * @author  CalderaWP <david@digilab.co.za>
  */
-class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
+class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 
 	/**
@@ -25,11 +25,11 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 		// add admin page
 		add_action( 'admin_menu', array( $this, 'add_settings_pages' ), 25 );
 		// save config
-		add_action( 'wp_ajax_cew_save_config', array( $this, 'save_config') );
+		add_action( 'wp_ajax_cub_save_config', array( $this, 'save_config') );
 		// rebuild rules
-		add_action( 'wp_ajax_cew_rebuild_rules', array( $this, 'rebuild_rules') );
+		add_action( 'wp_ajax_cub_rebuild_rules', array( $this, 'rebuild_rules') );
 		// test rules
-		add_action( 'wp_ajax_cew_test_rules', array( $this, 'test_rules') );
+		add_action( 'wp_ajax_cub_test_rules', array( $this, 'test_rules') );
 
 
 		
@@ -74,12 +74,12 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 
 			$posts = get_posts( array('post_type' => $type, 'posts_per_page' => 1 ) );
 			if( empty( $posts ) ){
-				$results[ $type ] = array( 'warning' => __( 'No posts to test.', 'caldera-easy-rewrites' ) );
+				$results[ $type ] = array( 'warning' => __( 'No posts to test.', 'caldera-url-builder' ) );
 				continue;
 			}
 
 			if( !empty( $struct[0] ) && false !== strpos( $struct[0], '_root_warning_' ) && empty( $rules['page'] ) ){
-				//$results[ $type ] = array( 'warning' => __( 'A variable as the first part will clash with pages, Create a rule for pages or set the first part as static.  ', 'caldera-easy-rewrites' ) );
+				//$results[ $type ] = array( 'warning' => __( 'A variable as the first part will clash with pages, Create a rule for pages or set the first part as static.  ', 'caldera-url-builder' ) );
 				$results[ $type ][] = array('pagename' => true );
 				//continue;
 			}
@@ -162,7 +162,7 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 	 */
 	public function save_config(){
 
-		if( empty( $_POST['caldera-easy-rewrites-setup'] ) || !wp_verify_nonce( $_POST['caldera-easy-rewrites-setup'], 'caldera-easy-rewrites' ) ){
+		if( empty( $_POST['caldera-url-builder-setup'] ) || !wp_verify_nonce( $_POST['caldera-url-builder-setup'], 'caldera-url-builder' ) ){
 			if( empty( $_POST['config'] ) ){
 				return;
 			}
@@ -171,11 +171,12 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 		update_option('_cer_rebuild_rules', true);
 		// reset rewrites
 
-		if( !empty( $_POST['caldera-easy-rewrites-setup'] ) && empty( $_POST['config'] ) ){
+		if( !empty( $_POST['caldera-url-builder-setup'] ) && empty( $_POST['config'] ) ){
 			$config = stripslashes_deep( $_POST );
 			$config = $this->add_sanitization_and_validation( $config );
-			update_option( '_caldera_easy_rewrites', $config );
-			//flush_rewrite_rules();
+
+			Caldera_URL_Builder_Options::save( $config );
+
 			wp_redirect( '?page=caldera_easy_rewrites&updated=true' );
 			exit;
 		}
@@ -183,13 +184,12 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 		if( !empty( $_POST['config'] ) ){
 			$config = json_decode( stripslashes_deep( $_POST['config'] ), true );
 			$config = $this->add_sanitization_and_validation( $config );
-			if(	wp_verify_nonce( $config['caldera-easy-rewrites-setup'], 'caldera-easy-rewrites' ) ){
-				update_option( '_caldera_easy_rewrites', $config );
-				
-				//flush_rewrite_rules();
 
-				//$this->rebuild_rules();
+			if(	wp_verify_nonce( $config['caldera-url-builder-setup'], 'caldera-url-builder' ) ){
+				
+				Caldera_URL_Builder_Options::save( $config );
 				wp_send_json_success( $config );
+			
 			}
 		}
 
@@ -209,7 +209,7 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 		foreach( $config as $setting => $value ) {
 			if ( ! in_array( $setting, $this->internal_config_fields() ) ) {
 				include_once( dirname( __FILE__ ) . '/sanatize.php' );
-				$filtered = Settings_Caldera_Easy_Rewrites_Sanitize::apply_sanitization_and_validation( $setting, $value, $config );
+				$filtered = Settings_Caldera_URL_Builder_Sanitize::apply_sanitization_and_validation( $setting, $value, $config );
 				$config = $filtered;
 			}
 
@@ -235,11 +235,17 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 	 * Add options page
 	 */
 	public function add_settings_pages(){
-		// This page will be under "Settings"
-		
-	
-			$this->plugin_screen_hook_suffix['caldera_easy_rewrites'] =  add_submenu_page( 'options-general.php', __( 'Caldera Easy Rewrites', $this->plugin_slug ), __( 'Easy Rewrites', $this->plugin_slug ), 'manage_options', 'caldera_easy_rewrites', array( $this, 'create_admin_page' ) );
-			add_action( 'admin_print_styles-' . $this->plugin_screen_hook_suffix['caldera_easy_rewrites'], array( $this, 'enqueue_admin_stylescripts' ) );
+			// This page will be under "Settings"
+			$this->plugin_screen_hook_suffix['caldera_url_builder'] =  add_submenu_page(
+				'options-general.php',
+				__( 'Caldera URL Builder', $this->plugin_slug ),
+				__( 'URL Builder', $this->plugin_slug ),
+				'manage_options',
+				'caldera_url_builder'
+				, array( $this, 'create_admin_page' )
+			);
+
+			add_action( 'admin_print_styles-' . $this->plugin_screen_hook_suffix[ 'caldera_url_builder' ], array( $this, 'enqueue_admin_stylescripts' ) );
 
 
 	}
@@ -254,12 +260,12 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 		$base = array_search($screen->id, $this->plugin_screen_hook_suffix);
 			
 		// include main template
-		include CEW_PATH .'includes/edit.php';
+		include CUB_PATH .'includes/edit.php';
 
 		// php based script include
-		if( file_exists( CEW_PATH .'assets/js/inline-scripts.php' ) ){
+		if( file_exists( CUB_PATH .'assets/js/inline-scripts.php' ) ){
 			echo "<script type=\"text/javascript\">\r\n";
-				include CEW_PATH .'assets/js/inline-scripts.php';
+				include CUB_PATH .'assets/js/inline-scripts.php';
 			echo "</script>\r\n";
 		}
 
@@ -269,5 +275,5 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 }
 
 if( is_admin() || defined( 'DOING_AJAX ') ){
-	$settings_caldera_easy_rewrites = new Settings_Caldera_Easy_Rewrites();
+	$settings_caldera_easy_rewrites = new Settings_Caldera_URL_Builder();
 }

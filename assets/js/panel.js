@@ -7,7 +7,7 @@ function caldera_easy_rewrites_randomUUID() {
 var caldera_easy_rewrites_field_callbacks = [];
 jQuery('document').ready(function($){
 	// add row
-	$('body').on('click', '.caldera-easy-rewrites-add-group-row', function(){
+	$('body').on('click', '.caldera-url-builder-add-group-row', function(){
 		var clicked = $( this ),
 			rowid = caldera_easy_rewrites_randomUUID(),
 			template = $( '#' + clicked.data('rowtemplate')).html().replace(/{{id}}/g, rowid);
@@ -26,13 +26,13 @@ jQuery('document').ready(function($){
 			}
 
 	});
-	$('body').on('click', '.caldera-easy-rewrites-removeRow', function(){
+	$('body').on('click', '.caldera-url-builder-removeRow', function(){
 		$(this).next().remove();
 		$(this).remove();
 		////console.log(this);
 	});
 	// tabs
-	$('body').on('click', '.caldera-easy-rewrites-metabox-config-nav li a, .caldera-easy-rewrites-shortcode-config-nav li a, .caldera-easy-rewrites-settings-config-nav li a, .caldera-easy-rewrites-widget-config-nav li a', function(){
+	$('body').on('click', '.caldera-url-builder-metabox-config-nav li a, .caldera-url-builder-shortcode-config-nav li a, .caldera-url-builder-settings-config-nav li a, .caldera-url-builder-widget-config-nav li a', function(){
 		$(this).parent().parent().find('.current').removeClass('current');
 		$(this).parent().parent().parent().parent().find('.group').hide();
 		$(''+$(this).attr('href')+'').show();
@@ -45,12 +45,12 @@ jQuery('document').ready(function($){
 
 	// initcallbacks
 	setInterval(function(){
-		$('.caldera-easy-rewrites-init-callback').each(function(k,v){
+		$('.caldera-url-builder-init-callback').each(function(k,v){
 			var callback = $(this);
 			if( typeof window[callback.data('init')] === 'function'){
 				console.log(callback.data('init'));
 				window[callback.data('init')]();
-				callback.removeClass('caldera-easy-rewrites-init-callback');
+				callback.removeClass('caldera-url-builder-init-callback');
 			}
 		});
 	}, 100);

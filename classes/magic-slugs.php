@@ -1,10 +1,10 @@
 <?php
 /**
- * Caldera Easy Rewrites Magic Slugs
+ * Caldera URL Builder Magic Slugs
  *
  * Parses %post.something% or %category.
  *
- * @package   Caldera_Easy_Rewrites
+ * @package   Caldera_URL_Builder
  * @author    CalderaWP <david@digilab.co.za>
  * @license   GPL-2.0+
  * @link
@@ -12,12 +12,12 @@
  */
 
 /**
- * Class Caldera_Easy_Rewrites_Magic_Slug
+ * Class Caldera_URL_Builder_Magic_Slug
  *
- * @package Caldera_Easy_Rewrites
+ * @package Caldera_URL_Builder
  * @author  Josh Pollock <Josh@JoshPress.net>
  */
-class Caldera_Easy_Rewrites_Magic_Slug {
+class Caldera_URL_Builder_Magic_Slug {
 
 	/**
 	 * Checks if a "magic" slug is valid

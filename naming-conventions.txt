@@ -1,5 +1,16 @@
+Plugin Name -- Caldera URL Builder
+Text domain -- caldera-url-builder
+Function prefix -- caldera_url_builder
+Root namespace -- n/a
+Class Prefix -- Caldera_URL_Builder
+Constant Prefix - CUB
+
+
+Previous to version 0.2.0:
+
 Plugin Name -- Caldera Easy Rewrites
 Text domain -- caldera-easy-rewrites
 Function prefix -- cer
 Root namespace -- n/a
 Class Prefix -- Caldera_Easy_Rewrites
+Constant Prefix - CEW
