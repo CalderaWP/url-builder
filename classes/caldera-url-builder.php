@@ -134,8 +134,14 @@ class Caldera_URL_Builder {
 		}
 
 		if( empty( $rules['rewrite'] ) ){
+			if ( $this->rebuild_flag() ) {
+				$this->rebuild_flag( false );
+			}
+
 			return;
+
 		}
+
 		$rule_list = array();
 		// start working on em.
 		foreach( $rules['rewrite'] as $rule_id=>$rule ){
@@ -211,9 +217,29 @@ class Caldera_URL_Builder {
 			return $rule_list;
 		}
 		
+		$this->rebuild_flag( false );
+
+	}
+
+	/**
+	 * Get the value of the "rebuild needed" flag or attempt to flush if its set.
+	 *
+	 * @since 0.3.0
+	 *
+	 * @param bool $get Optional. If true, just value is returned, if false, the whole check if flush and maybe flush is performed.
+	 *
+	 * @return mixed|void
+	 */
+	protected function rebuild_flag( $get = true ) {
 		$flag = get_option( '_cer_rebuild_rules', false );
+		if ( $get ) {
+			return $flag;
+
+		}
+
+
 		if( !empty( $flag ) ){
-			
+			global $wp_rewrite;
 			delete_option( '_cer_rebuild_rules' );
 			$wp_rewrite->flush_rules( false );
 			wp_safe_redirect( $_SERVER['REQUEST_URI'] );
