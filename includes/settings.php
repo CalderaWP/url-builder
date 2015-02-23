@@ -44,8 +44,6 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 
 		flush_rewrite_rules();
 
-		$this->test_rules( true );
-
 	}
 
 
@@ -170,13 +168,14 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 			}
 		}
 		
+		update_option('_cer_rebuild_rules', true);
 		// reset rewrites
 
 		if( !empty( $_POST['caldera-easy-rewrites-setup'] ) && empty( $_POST['config'] ) ){
 			$config = stripslashes_deep( $_POST );
 			$config = $this->add_sanitization_and_validation( $config );
 			update_option( '_caldera_easy_rewrites', $config );
-			flush_rewrite_rules();
+			//flush_rewrite_rules();
 			wp_redirect( '?page=caldera_easy_rewrites&updated=true' );
 			exit;
 		}
@@ -189,8 +188,8 @@ class Settings_Caldera_Easy_Rewrites extends Caldera_Easy_Rewrites{
 				
 				//flush_rewrite_rules();
 
-				$this->rebuild_rules();
-				//wp_send_json_success( $config );
+				//$this->rebuild_rules();
+				wp_send_json_success( $config );
 			}
 		}
 

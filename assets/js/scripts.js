@@ -29,13 +29,13 @@ jQuery( function($){
 			if( typeof result.data[ type ]['warning'] !== 'undefined' ){
 
 				// error - no posts
-				$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + result.data[ type ]['warning'] + '</span>');
+				$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + result.data[ type ]['warning'] + '</span>').find('.route-pass-flag').val('oooo');
 
 			}else{
 				
 				if( result.data[ type ].length > 2 ){
 					// error
-					$( '.preview-type-' + type ).addClass('danger').append('<span class="notice">' + $('#rewrite-notice-error').html() + '</span>');					
+					$( '.preview-type-' + type ).addClass('danger').append('<span class="notice">' + $('#rewrite-notice-error').html() + '</span>').find('.route-pass-flag').val('false');					
 					for( var p = 0; p < result.data[ type ].length; p++ ){
 
 						// whats the clash?
@@ -59,10 +59,10 @@ jQuery( function($){
 						$( '.preview-type-' + type + ' .notice' ).append( ' & ' + last );
 					}
 				}else if( result.data[ type ].length === 2 && typeof result.data[ type ][0]['attachment'] !== 'undefined' ){
-					$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + $('#rewrite-notice-warning').html() + '</span>');
+					$( '.preview-type-' + type ).addClass('warning').append('<span class="notice">' + $('#rewrite-notice-warning').html() + '</span>').find('.route-pass-flag').val('false');
 				}else{
 					// tis good
-					$( '.preview-type-' + type ).addClass('success').append('<span class="notice">' + $('#rewrite-notice-success').html() + '</span>');
+					$( '.preview-type-' + type ).addClass('success').append('<span class="notice">' + $('#rewrite-notice-success').html() + '</span>').find('.route-pass-flag').val('true');
 				}
 
 			}

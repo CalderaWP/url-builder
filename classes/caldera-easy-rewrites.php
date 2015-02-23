@@ -40,7 +40,7 @@ class Caldera_Easy_Rewrites {
 	 */
 	private function __construct() {
 
-		// Load plugin text domain
+		// load text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		/// setup rewrite rules
@@ -121,6 +121,11 @@ class Caldera_Easy_Rewrites {
 		$rule_list = array();
 		// start working on em.
 		foreach( $rules['rewrite'] as $rule_id=>$rule ){
+
+			if( false === $rule['pass'] ){
+				continue;
+			}
+
 			// structs
 			$structure = array();
 			$args = array();
@@ -178,8 +183,17 @@ class Caldera_Easy_Rewrites {
 
 		}
 
-		if( false !== $test_config ){
+		if( is_array( $test_config ) ){
 			return $rule_list;
+		}
+		
+		$flag = get_option( '_cer_rebuild_rules', false );
+		if( !empty( $flag ) ){
+			
+			delete_option( '_cer_rebuild_rules' );
+			$wp_rewrite->flush_rules( false );
+			wp_safe_redirect( $_SERVER['REQUEST_URI'] );
+			exit;
 		}
 
 	}
