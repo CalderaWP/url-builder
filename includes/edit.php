@@ -16,17 +16,23 @@ foreach( $post_types as $post_type=>$post_object ){
 
 	$caldera_url_builer['content_types'][ $post_type ] = (array) $post_object->rewrite;
 	// get taxos
-	$taxonomies = get_taxonomies( array( 'object_type' => array( $post_type ) ), 'objects' );
+
+	$taxonomies = get_object_taxonomies( $post_type );
 	if( !empty( $taxonomies ) ){
-		foreach ( $taxonomies as $taxonom_name => $taxonomy) {
-			$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonom_name ] = array(
+		foreach ( $taxonomies as $taxonomy_name  ) {
+
+			$taxonomy = get_taxonomy( $taxonomy_name );
+
+			$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonomy_name ] = array(
 				'name'	=>	$taxonomy->name,
 				'label'	=>	$taxonomy->label,
 				'terms'	=>	get_terms( $taxonomy->name )
 			);
 		}
 	}
+
 	// get custom field keys
+	//@todo in version 2.0
 	/*$custom_field_keys = $wpdb->get_results( $wpdb->prepare( "SELECT 
 	 	
 	 	`" . $wpdb->postmeta . "`.`meta_key` AS `meta_key`, 
