@@ -9,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name: Caldera URL Builder
  * Plugin URI:  http://CalderaWP.com/downlaods/caldera-url-builder
- * Description: Visual editor for WordPress permalinks.
+ * Description: The visual editor for WordPress permalinks.
  * Version:     0.1.0
  * Author:      David Cramer for CalderaWP <david@calderaWP.com>
  * Author URI:  http://calderawp.com/

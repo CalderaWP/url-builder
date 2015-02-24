@@ -1,6 +1,6 @@
 {
   "name" : "calderawp/caldera-url-builder",
-  "description" : "Visual WordPress permalink customizer.",
+  "description" : "The visual editor for WordPress permalinks.",
   "type" : "wordpress-plugin",
   "keywords" : [ "wordpress", "rewrites", "caldera" ],
   "license" : "GPL-2.0+",
