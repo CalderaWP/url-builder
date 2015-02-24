@@ -21,6 +21,8 @@ class Settings_Caldera_URL_Builder_Sanitize {
 	 *
 	 * @access protected
 	 *
+	 * @since 0.0.1
+	 *
 	 * @param string $setting The name of the setting being saved.
 	 * @param mixed $value The value being saved
 	 * @param array $config Data being saved
@@ -70,6 +72,8 @@ class Settings_Caldera_URL_Builder_Sanitize {
 	/**
 	 * Actually applies the sanization and/ or validation filter
 	 *
+	 * @since 0.0.1
+	 *
 	 * @access protected
 	 *
 	 * @param string $setting The name of the setting being saved.
@@ -85,6 +89,8 @@ class Settings_Caldera_URL_Builder_Sanitize {
 
 		/**
 		 * Hook here to sanatize/validate settings
+		 *
+		 * @since 0.0.1
 		 *
 		 * @param string $setting The name of the setting being saved.
 		 * @param mixed $value The value being saved

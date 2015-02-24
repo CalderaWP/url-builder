@@ -1,4 +1,5 @@
 <?php
+//main edit interface
 
 global $wpdb;
 

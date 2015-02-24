@@ -18,18 +18,24 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 
 	/**
-	 * Start up
+	 * Constructor for this class
+	 *
+	 * @since 0.0.1
 	 */
 	public function __construct(){
 
 		// add admin page
 		add_action( 'admin_menu', array( $this, 'add_settings_pages' ), 25 );
+
 		// save config
 		add_action( 'wp_ajax_cub_save_config', array( $this, 'save_config') );
+
 		// rebuild rules
 		add_action( 'wp_ajax_cub_rebuild_rules', array( $this, 'rebuild_rules') );
+
 		// test rules
 		add_action( 'wp_ajax_cub_test_rules', array( $this, 'test_rules') );
+
 		// get license key
 		add_action( 'wp_ajax_cub_get_caldera_url_builder_license', array( $this, 'get_config_license') );
 
@@ -38,6 +44,10 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 	/**
 	 * Returns current licence data
+	 *
+	 * @uses "wp_ajax_cub_get_caldera_url_builder_license" action.
+	 *
+	 * @since 0.0.1
 	 */
 	public function get_config_license(){
 		global $cub_licensing_output;
@@ -57,7 +67,11 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	}
 
 	/**
-	 * rebuilds rules
+	 * Rebuilds rewrite rules
+	 *
+	 * @uses "wp_ajax_cub_rebuild_rules" action
+	 *
+	 * @since 0.0.1
 	 */
 	public function rebuild_rules(){
 		global $wp_rewrite;
@@ -68,7 +82,13 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 
 	/**
-	 * test rules without saving.
+	 * Test rules without saving.
+	 *
+	 * @uses "wp_ajax_cub_test_rules" action
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param bool $rebuilt Have rules been rebuilt already?
 	 */
 	public function test_rules( $rebuilt = false ){
 		global $wp_rewrite;
@@ -99,12 +119,12 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 			}
 
 			if( !empty( $struct[0] ) && false !== strpos( $struct[0], '_root_warning_' ) && empty( $rules['page'] ) ){
-				//$results[ $type ] = array( 'warning' => __( 'A variable as the first part will clash with pages, Create a rule for pages or set the first part as static.  ', 'caldera-url-builder' ) );
 				$results[ $type ][] = array('pagename' => true );
 				//continue;
 			}
 
 			$post = $posts[0];
+
 			// get a permalink for the first post found.
 			$url = $this->create_permalink( get_permalink( $post->ID ), $post->ID );
 
@@ -177,8 +197,13 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 		wp_send_json_success( $results );
 	}
+
 	/**
-	 * saves a config
+	 * Saves a configurations
+	 *
+	 * @uses "wp_ajax_cub_save_config" action
+	 *
+	 * @since 0.0.1
 	 */
 	public function save_config(){
 
@@ -221,6 +246,8 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	/**
 	 * Adds the filter for sanization and/ or validation of each setting when saving.
 	 *
+	 * @since 0.0.1
+	 *
 	 * @param array $config Data being saved
 	 *
 	 * @return array
@@ -242,6 +269,8 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	/**
 	 * Array of "internal" fields not to mess with
 	 *
+	 * @since 0.0.1
+	 *
 	 * @return array
 	 */
 	protected function internal_config_fields() {
@@ -253,8 +282,13 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 	/**
 	 * Add options page
+	 *
+	 * @uses "admin_menu" action
+	 *
+	 * @since 0.0.1
 	 */
 	public function add_settings_pages(){
+
 			// This page will be under "Settings"
 			$this->plugin_screen_hook_suffix['caldera_url_builder'] =  add_submenu_page(
 				'options-general.php',
@@ -273,6 +307,8 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 	/**
 	 * Options page callback
+	 *
+	 * @since 0.0.1
 	 */
 	public function create_admin_page(){
 		// Set class property        
@@ -294,6 +330,9 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 }
 
-if( is_admin() || defined( 'DOING_AJAX ') ){
+/**
+ * Create class instance
+ */
+if( is_admin() || defined( 'DOING_AJAX' ) ){
 	$settings_caldera_easy_rewrites = new Settings_Caldera_URL_Builder();
 }

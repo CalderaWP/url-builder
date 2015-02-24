@@ -30,6 +30,7 @@ define('CUB_VER',  '0.1.0' );
 
 // load dependancies
 include_once( CUB_PATH . 'vendor/autoload.php' );
+
 // load internals
 require_once( CUB_PATH . 'classes/caldera-url-builder.php' );
 require_once( CUB_PATH . 'classes/magic-slugs.php' );
