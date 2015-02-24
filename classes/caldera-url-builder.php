@@ -311,7 +311,36 @@ class Caldera_URL_Builder {
 
 
 
+/**
+ * Software Licensing
+ */
+add_action( 'admin_init', function( ) {
+	$params = array(
+		'store_url' => 'http://calderawp.com',
+		'version'   => CEP_VER,
+		'item_name' => 'Caldera URL Builder',
+		'author'    => 'CalderaWP',
+		'plugin_root_file' => CEP_PATH . 'plugincore.php',
+		'prefix'    => 'cub'
+	);
 
+	$cub_licensing = new \calderawp\licensing\main( $params );
+
+	$button_baldrick = array(
+		'action' => 'cub_save_license',
+		'before' => 'cub_license_before',
+		'callback' => 'cub_license_cb'
+
+	);
+
+	/**
+	 * @var calderawp\licensing\output
+	 */
+	global $cub_licensing_output;
+	$cub_licensing_output = new calderawp\licensing\output( $cub_licensing, $button_baldrick );
+
+
+}, 0 );
 
 
 

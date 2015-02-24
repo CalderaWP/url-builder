@@ -30,11 +30,31 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 		add_action( 'wp_ajax_cub_rebuild_rules', array( $this, 'rebuild_rules') );
 		// test rules
 		add_action( 'wp_ajax_cub_test_rules', array( $this, 'test_rules') );
-
+		// get license key
+		add_action( 'wp_ajax_cub_get_caldera_url_builder_license', array( $this, 'get_config_license') );
 
 		
 	}
 
+	/**
+	 * Returns current licence data
+	 */
+	public function get_config_license(){
+		global $cub_licensing_output;
+
+		$license = $cub_licensing_output->get_license_code();
+		$status = $cub_licensing_output->get_license_status();
+		$data = array(
+			'data' => array(
+				'key'		=>	( $license ? $license : '' ),
+				'status'	=>	( $status ? $status : '0' )
+			)
+
+		);
+
+		wp_send_json( $data );
+
+	}
 
 	/**
 	 * rebuilds rules

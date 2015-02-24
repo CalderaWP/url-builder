@@ -4,6 +4,8 @@
 
 		<button type="submit" class="add-new-h2 wp-baldrick" data-action="cub_save_config" data-active-class="none" data-load-element="#caldera-url-builder-save-indicator" data-before="cub_get_config_object" ><?php _e('Save Changes', 'caldera-url-builder') ; ?></button>
 
+		<span class="add-new-h2 wp-baldrick" data-modal="license-caldera-url-builder" data-modal-height="210" data-modal-width="402" data-modal-buttons='<?php _e( 'Update License', 'caldera-url-builder' ); ?>|{"data-active-class" : "nope", "data-action":"cub_save_license","data-before":"cub_caldera_url_builder_license", "data-template": "#license-modal-template", "data-target" : "#license-caldera-url-builder_baldrickModalBody"}' data-modal-title="<?php _e('Caldera URL Builder License', 'caldera-url-builder') ; ?>" data-action="cub_get_caldera_url_builder_license" data-template="#license-modal-template" style="margin-right: 0px;"><?php _e('License', 'caldera-url-builder') ; ?></span>
+
 		<span class="wp-baldrick" id="caldera-url-builder-test-rules" data-event="testlines" data-autoload="true" data-action="cub_test_rules" data-before="cub_get_config_object" data-callback="cub_rebuild_results" data-active-class="none" data-load-element="#scaldera-url-builder-save-indicator"></span>
 		<span style="display: inline-block;" id="caldera-url-builder-save-indicator"><span style="float: none; margin: 0px 0px -2px;" class="spinner"></span></span>
 

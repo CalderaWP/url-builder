@@ -76,8 +76,38 @@ foreach( $post_types as $post_type=>$post_object ){
 	include CUB_PATH . 'includes/templates/main-ui.php';
 	?>	
 </script>
+<script type="text/html" id="license-modal-template">
+	<?php
+	// pull in the join table card template
+	include CUB_PATH . 'includes/templates/license-modal.php';
+	?>	
+</script>
+<script type="text/javascript">
+	
+	function cub_caldera_url_builder_license(el){
 
+		var caldera_url_builder 	= jQuery(el),
+			nonce	= jQuery('#cub_license_nonce'),
+			refer	= jQuery('[name="_wp_http_referer"]'),
+			action 	= jQuery('#caldera-url-builder-action'),
+			key 	= jQuery("#caldera-url-builder-license_key");
 
+		if( key.val().length === 0 ){
+			key.focus();
+			return false;
+		}
+
+		jQuery('#caldera-url-builder-license_key_loader').css('display', 'inline-block');
+		caldera_url_builder.data({
+			'code' : key.val(),
+			'cub_license_nonce' : nonce.val(),
+			'_wp_http_referer' : refer.val(),
+			'license_action' : action.val()
+		}); 
+
+	}
+
+</script>
 
 
 

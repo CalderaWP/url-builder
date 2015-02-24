@@ -28,11 +28,12 @@ define('CUB_PATH',  plugin_dir_path( __FILE__ ) );
 define('CUB_URL',  plugin_dir_url( __FILE__ ) );
 define('CUB_VER',  '0.1.0' );
 
-
+// load dependancies
+include_once( CUB_PATH . 'vendor/autoload.php' );
 // load internals
-require_once( CUB_PATH . '/classes/caldera-url-builder.php' );
+require_once( CUB_PATH . 'classes/caldera-url-builder.php' );
 require_once( CUB_PATH . 'classes/magic-slugs.php' );
-require_once( CUB_PATH . '/classes/options.php' );
+require_once( CUB_PATH . 'classes/options.php' );
 require_once( CUB_PATH . 'includes/settings.php' );
 
 // activation hook
