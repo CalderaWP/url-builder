@@ -349,3 +349,7 @@ h4 > small.description {
   background-color: #e8ffd8;
 }
 
+div#caldera-url-builder-panel-about {
+    background: #FFF;
+    padding: 24px;
+}
