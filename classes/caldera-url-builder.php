@@ -317,10 +317,10 @@ class Caldera_URL_Builder {
 add_action( 'admin_init', function( ) {
 	$params = array(
 		'store_url' => 'http://calderawp.com',
-		'version'   => CEP_VER,
+		'version'   => CUB_VER,
 		'item_name' => 'Caldera URL Builder',
 		'author'    => 'CalderaWP',
-		'plugin_root_file' => CEP_PATH . 'plugincore.php',
+		'plugin_root_file' => CUB_PATH . 'plugincore.php',
 		'prefix'    => 'cub'
 	);
 
