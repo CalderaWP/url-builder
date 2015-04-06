@@ -31,7 +31,7 @@
 	<input type="hidden" value="{{json content_types}}" name="content_types">
 
 		<div id="caldera-url-builder-panel-routes" class="caldera-url-builder-editor-panel" {{#is _current_tab value="#caldera-url-builder-panel-routes"}}{{else}} style="display:none;" {{/is}}>
-		<h4><?php _e('Rewite Routes', 'caldera-url-builder') ; ?> <small class="description"><?php _e('Rules', 'caldera-url-builder') ; ?></small></h4>
+		<h4><?php _e('Rewrite Routes', 'caldera-url-builder') ; ?> <small class="description"><?php _e('Rules', 'caldera-url-builder') ; ?></small></h4>
 		<?php
 		// pull in the general settings template
 		include CUB_PATH . 'includes/templates/routes-panel.php';

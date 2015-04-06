@@ -1,6 +1,6 @@
 <?php
 
-	// Panel template for Rewite Routes	
+	// Panel template for Rewrite Routes	
 
 ?>
 
