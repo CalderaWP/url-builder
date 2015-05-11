@@ -53,7 +53,7 @@ class Caldera_URL_Builder {
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		/// setup rewrite rules
-		add_action( 'init', array( $this, 'define_rewrites' ), 100 );
+		//add_action( 'init', array( $this, 'define_rewrites' ), 100 );
 
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
@@ -65,6 +65,95 @@ class Caldera_URL_Builder {
 		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 3 );
 		add_filter( 'post_link', array( $this, 'create_permalink' ), 1, 3 );
 		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
+		add_filter( 'post_type_archive_link', array( $this, 'create_permalink' ), 10, 3 );
+
+		add_filter('nope - rewrite_rules_array', function( $rewrites ){
+
+			$sync = array_reverse( $rewrites, true );
+
+			$sync['sweetertater/?$'] = 'index.php?post_type=accommodation';
+
+			$rewrites = array_reverse( $sync, true );
+
+			// load up the rules
+			//if( empty( $test_config ) || true === $test_config ){
+				$rules = $this->saved;
+			//}else{
+			//	$rules = $test_config;
+			//}
+
+			if( empty( $rules['rewrite'] ) ){
+				if ( $this->rebuild_flag() ) {
+					$this->rebuild_flag( false );
+				}
+
+				return;
+
+			}
+
+			$rule_list = array();
+			// start working on em.
+			foreach( $rules['rewrite'] as $rule_id=>$rule ){
+
+				if( false === $rule['pass'] ){
+					continue;
+				}
+
+				// structs
+				$structure = array();
+				$args = array();
+
+				if( !empty( $rule['segment'] ) ){
+					$first = true;
+					foreach( $rule['segment'] as $segment_id=>$segment ){
+
+						switch ( $segment['type'] ) {
+							case 'taxonomy':
+								//$structure[] = '%' . $segment['taxonomy'] . '%';
+								$structure[] = '%' . $segment_id . '%';
+								add_rewrite_tag( '%' . $segment_id . '%', '([^&^/]+)', $segment['taxonomy'] . '=' );
+
+								//$this->rule_structs[ $rule['content_type'] ][ $segment['taxonomy'] ] = $segment['default'];
+								//$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = $segment['default'];
+								$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = array(
+									'default' => $segment[ 'default' ],
+									'taxonomy' => $segment[ 'taxonomy' ],
+								);
+								
+								//if( ( !empty( $test_config ) || true === $test_config ) && $first = true ){
+								//	$rule_list[ $rule['content_type'] ][] = '_root_warning_' . $segment['default'];
+								//}else{
+									$rule_list[ $rule['content_type'] ][] = $segment['default'];
+								//}
+								
+
+								break;						
+							case 'static':
+								$structure[] = $segment['path'];
+								$rule_list[ $rule['content_type'] ][] = $segment['path']; 
+								break;
+							default:
+								# code...
+								break;
+						}
+
+						$first = false;
+					}
+
+				}
+			}
+			var_dump( $structure );
+			var_dump( $rule_list );
+			var_dump( $rewrites );
+			die;
+
+			return $rewrites;
+
+
+
+			var_dump( $rules );
+			die;
+		});
 
 		//get saved settings
 		$this->saved = Caldera_URL_Builder_Options::get_all();
@@ -205,9 +294,20 @@ class Caldera_URL_Builder {
 				$wp_rewrite->page_structure = implode( '/', $structure );
 	
 			}else{
+				// type
+				if( false !== strpos( $rule['content_type'], '_archive') ){
+					$type_parts = explode( '_archive', $rule['content_type'] );					
+					if( !isset( $wp_rewrite->extra_permastructs[ $rule['content_type'] ] ) ){
+						$wp_rewrite->extra_permastructs[ $rule['content_type'] ] = $wp_rewrite->extra_permastructs[ $type_parts[0] ];
+					}
+					$structure[] = '%post_name%';
+					add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+
+				}else{
 				
-				$structure[] = '%' . $rule['content_type'] . '%';
-				add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+					$structure[] = '%' . $rule['content_type'] . '%';
+					add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+				}
 	
 			}
 
@@ -216,7 +316,7 @@ class Caldera_URL_Builder {
 		if( is_array( $test_config ) ){
 			return $rule_list;
 		}
-		
+		///var_dump($wp_rewrite);
 		$this->rebuild_flag( false );
 
 	}

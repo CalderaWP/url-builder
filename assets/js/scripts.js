@@ -5,6 +5,7 @@ var caldera_easy_rewrites_canvas = false,
 	cub_get_default_setting,
 	init_magic_tags,
 	cub_rebuild_magics,
+	cub_handle_save,
 	config_object = {},
 	magic_tags = [],
 	cub_rebuild_results,
@@ -12,6 +13,24 @@ var caldera_easy_rewrites_canvas = false,
 	cub_initial_load = true;
 
 jQuery( function($){
+
+	cub_handle_save = function( obj ){
+
+		var notice;
+
+		if( obj.data.success ){
+			notice = $('.updated_notice_box');
+		}else{
+			notice = $('.error_notice_box');
+		}
+
+		notice.stop().animate({top: -5}, 200, function(){
+			setTimeout( function(){
+				notice.stop().animate({top: -75}, 200);
+			}, 2000);
+		});
+
+	}
 
 
 	cub_rebuild_results = function( obj ){

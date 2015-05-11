@@ -49,7 +49,7 @@
 							<select data-live-sync="true" name="rewrite[{{../../../../_id}}][segment][{{../../../_id}}][default]" style="vertical-align: unset; margin-left: -5px;" placeholder="<?php _e( 'Default', 'caldera-url-builder' ); ?>">
 								<option value="" disabled><?php _e( 'Select Default', 'caldera-url-builder' ); ?></option>
 								{{#each terms}}
-									<option value="{{slug}}" {{#is ../../../default value="slug"}}selected="selected"{{/is}}>{{slug}}</option>
+									<option value="{{slug}}" {{#is ../../../default value="slug"}}selected="selected"{{/is}}>{{name}}</option>
 								{{/each}}
 							</select>
 							

@@ -284,6 +284,7 @@ h4 > small.description {
 }
 #caldera-url-builder-save-indicator.loading .spinner{
   display: block;
+  visibility: visible;
 }
 
 
@@ -352,4 +353,21 @@ h4 > small.description {
 div#caldera-url-builder-panel-about {
     background: #FFF;
     padding: 24px;
+}
+
+.caldera-url-builder-main-headercaldera .error_notice_box,
+.caldera-url-builder-main-headercaldera .updated_notice_box {
+  background: #fff;
+  border-left: 8px solid rgb(175, 175, 0);
+  color: #333;
+  display: inline-block;
+  padding: 20px 23px 15px 12px;
+  position: absolute;
+  top: -75px;
+  left: 0;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+.caldera-url-builder-main-headercaldera .error_notice_box {
+  border-left: 8px solid rgb(175, 0, 0);
 }

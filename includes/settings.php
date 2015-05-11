@@ -112,6 +112,13 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 		foreach( $rules as $type=>$struct ){
 
+			// type
+			if( false !== strpos( $type, '_archive') ){
+				$type_part = explode('_archive', $type);
+				$type = $type_part[0];
+				$archive = true;
+			}
+
 			$posts = get_posts( array('post_type' => $type, 'posts_per_page' => 1 ) );
 			if( empty( $posts ) ){
 				$results[ $type ] = array( 'warning' => __( 'No posts to test.', 'caldera-url-builder' ) );
@@ -176,6 +183,7 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 					global $wp;
 					parse_str( $query, $query_vars );
 					$query = array();
+
 					foreach ( (array) $query_vars as $key => $value ) {
 						if ( in_array( $key, $wp->public_query_vars ) ){
 							$query[$key] = $value;

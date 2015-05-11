@@ -1,6 +1,32 @@
 <?php
 //main edit interface
 
+function cub_get_children( $term, $depth = 0 ){
+
+	
+	$prefix = null;
+	for( $i = 0; $i < $depth; $i++ ){
+		$prefix .= '&nbsp;';
+	}
+	$term->name = $prefix . $term->name;
+
+
+	$out_terms = array( $term );
+	$terms = get_terms( $term->taxonomy, array( 'parent' => $term->term_id ) );
+	if( !empty( $terms ) ){
+		foreach( $terms as $term ){
+			$out_terms = array_merge( $out_terms, cub_get_children( $term, ($depth+1) ) );
+		}
+		//$out_terms = array_merge( $out_terms, $terms )
+	}
+	//var_dump( $terms );
+
+	return $out_terms;
+
+}
+
+
+
 global $wpdb;
 
 $caldera_url_builer = Caldera_URL_Builder_Options::get_all();
@@ -16,6 +42,9 @@ $caldera_url_builer['content_types'] = array();
 foreach( $post_types as $post_type=>$post_object ){
 
 	$caldera_url_builer['content_types'][ $post_type ] = (array) $post_object->rewrite;
+	if( false !== $post_object->has_archive ){
+		$caldera_url_builer['content_types'][ $post_type . '_archive' ] = (array) $post_object->rewrite;
+	}
 	// get taxos
 
 	$taxonomies = get_object_taxonomies( $post_type );
@@ -27,8 +56,22 @@ foreach( $post_types as $post_type=>$post_object ){
 			$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonomy_name ] = array(
 				'name'	=>	$taxonomy->name,
 				'label'	=>	$taxonomy->label,
-				'terms'	=>	get_terms( $taxonomy->name )
+				'terms'	=>	array()
 			);
+
+			$terms = get_terms( $taxonomy->name, array( 'parent' => 0 ) );
+			if( !empty( $terms ) ){
+				$terms_sorted = array();
+				// parents only
+				foreach( $terms as  $term ){
+					$terms_sorted = array_merge( $terms_sorted, cub_get_children( $term ) );
+				}
+
+				$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonomy_name ]['terms'] = $terms_sorted;	
+			}
+
+			
+
 		}
 	}
 

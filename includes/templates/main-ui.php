@@ -2,7 +2,7 @@
 		<h2>
 		<?php _e( 'Caldera URL Builder', 'caldera-url-builder' ); ?> <span class="caldera-url-builder-version"><?php echo CUB_VER; ?></span>
 
-		<button type="submit" class="add-new-h2 wp-baldrick" data-action="cub_save_config" data-active-class="none" data-load-element="#caldera-url-builder-save-indicator" data-before="cub_get_config_object" ><?php _e('Save Changes', 'caldera-url-builder') ; ?></button>
+		<button type="submit" class="add-new-h2 wp-baldrick" data-action="cub_save_config" data-active-class="none" data-load-element="#caldera-url-builder-save-indicator" data-callback="cub_handle_save" data-before="cub_get_config_object" ><?php _e('Save Changes', 'caldera-url-builder') ; ?></button>
 
 		<span class="add-new-h2 wp-baldrick" data-modal="license-caldera-url-builder" data-modal-height="210" data-modal-width="402" data-modal-buttons='<?php _e( 'Update License', 'caldera-url-builder' ); ?>|{"data-active-class" : "nope", "data-action":"cub_save_license","data-before":"cub_caldera_url_builder_license", "data-template": "#license-modal-template", "data-target" : "#license-caldera-url-builder_baldrickModalBody"}' data-modal-title="<?php _e('Caldera URL Builder License', 'caldera-url-builder') ; ?>" data-action="cub_get_caldera_url_builder_license" data-template="#license-modal-template" style="margin-right: 0px;"><?php _e('License', 'caldera-url-builder') ; ?></span>
 
@@ -10,9 +10,8 @@
 		<span style="display: inline-block;" id="caldera-url-builder-save-indicator"><span style="float: none; margin: 0px 0px -2px;" class="spinner"></span></span>
 
 	</h2>
-			<div class="subsubsub caldera-url-builder-nav-tabs">
-								
-		</div>		
+		<div class="updated_notice_box"><?php _e( 'Updated Successfully', 'caldera-url-builder' ); ?></div>
+		<div class="error_notice_box"><?php _e( 'Could not save changes.', 'caldera-url-builder' ); ?></div>	
 		<div class="clear"></div>
 
 	<span class="wp-baldrick" id="caldera-url-builder-field-sync" data-event="refresh" data-target="#caldera-url-builder-main-canvas" data-callback="cub_canvas_init" data-type="json" data-request="#caldera-url-builder-live-config" data-template="#main-ui-template"></span>
