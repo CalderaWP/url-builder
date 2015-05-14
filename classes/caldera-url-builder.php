@@ -32,7 +32,7 @@ class Caldera_URL_Builder {
 	/**
 	 * @var      array
 	 */
-	protected $rule_structs = null;
+	protected $rule_structs = array();
 
 	/**
 	 * The saved rewrites
@@ -65,101 +65,31 @@ class Caldera_URL_Builder {
 		add_filter( 'post_type_link', array( $this, 'create_permalink' ), 10, 3 );
 		add_filter( 'post_link', array( $this, 'create_permalink' ), 1, 3 );
 		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
-		add_filter( 'post_type_archive_link', array( $this, 'create_permalink' ), 10, 3 );
+		add_filter( 'post_type_archive_link', array( $this, 'create_archive_permalink' ), 10, 2 );
 
-		add_filter('nope - rewrite_rules_array', function( $rewrites ){
-
-			$sync = array_reverse( $rewrites, true );
-
-			$sync['sweetertater/?$'] = 'index.php?post_type=accommodation';
-
-			$rewrites = array_reverse( $sync, true );
-
-			// load up the rules
-			//if( empty( $test_config ) || true === $test_config ){
-				$rules = $this->saved;
-			//}else{
-			//	$rules = $test_config;
-			//}
-
-			if( empty( $rules['rewrite'] ) ){
-				if ( $this->rebuild_flag() ) {
-					$this->rebuild_flag( false );
-				}
-
-				return;
-
-			}
-
-			$rule_list = array();
-			// start working on em.
-			foreach( $rules['rewrite'] as $rule_id=>$rule ){
-
-				if( false === $rule['pass'] ){
-					continue;
-				}
-
-				// structs
-				$structure = array();
-				$args = array();
-
-				if( !empty( $rule['segment'] ) ){
-					$first = true;
-					foreach( $rule['segment'] as $segment_id=>$segment ){
-
-						switch ( $segment['type'] ) {
-							case 'taxonomy':
-								//$structure[] = '%' . $segment['taxonomy'] . '%';
-								$structure[] = '%' . $segment_id . '%';
-								add_rewrite_tag( '%' . $segment_id . '%', '([^&^/]+)', $segment['taxonomy'] . '=' );
-
-								//$this->rule_structs[ $rule['content_type'] ][ $segment['taxonomy'] ] = $segment['default'];
-								//$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = $segment['default'];
-								$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = array(
-									'default' => $segment[ 'default' ],
-									'taxonomy' => $segment[ 'taxonomy' ],
-								);
-								
-								//if( ( !empty( $test_config ) || true === $test_config ) && $first = true ){
-								//	$rule_list[ $rule['content_type'] ][] = '_root_warning_' . $segment['default'];
-								//}else{
-									$rule_list[ $rule['content_type'] ][] = $segment['default'];
-								//}
-								
-
-								break;						
-							case 'static':
-								$structure[] = $segment['path'];
-								$rule_list[ $rule['content_type'] ][] = $segment['path']; 
-								break;
-							default:
-								# code...
-								break;
-						}
-
-						$first = false;
-					}
-
-				}
-			}
-			var_dump( $structure );
-			var_dump( $rule_list );
-			var_dump( $rewrites );
-			die;
-
-			return $rewrites;
-
-
-
-			var_dump( $rules );
-			die;
-		});
+		add_filter('rewrite_rules_array', array( $this, 'archive_rules_rewrite' ) );
+		add_filter('rewrite_rules_test_array', array( $this, 'archive_rules_rewrite' ) );
 
 		//get saved settings
 		$this->saved = Caldera_URL_Builder_Options::get_all();
 		
 	}
 
+	
+	/**
+	 * Return a new structured archive permalink.
+	 *
+	 * @param string	$post_link	current post url link
+	 * @param int 		$post_id	current post ID
+	 *
+	 * @return    string    url permalink
+	 */
+	public function create_archive_permalink( $link, $post_type ){
+		
+		//$rules = $this->rule_structs[ $post->post_type ];
+		return home_url() . '/' . $this->rule_structs[$post_type . '_archive'];
+
+	}
 	/**
 	 * Return a new structured permalink.
 	 *
@@ -201,6 +131,92 @@ class Caldera_URL_Builder {
 
 	}
 
+
+
+	/**
+	 * filter finilized rules to addin additionals like archives
+	 *
+	 *
+	 * @return    array   rewrite rules array
+	 */
+	public function archive_rules_rewrite( $rewrites ){
+		
+		global $wp_rewrite;
+
+		/// create archives
+		// load up the rules
+		if( empty( $test_config ) || true === $test_config ){
+			$rules = $this->saved;
+		}else{
+			$rules = $test_config;
+		}			
+
+		$rule_list = array();
+		$post_types = get_post_types( null, 'objects' );
+		if( empty( $rules['rewrite'] ) ){
+			return $rewrites;
+		}
+		// start working on em.
+		foreach( $rules['rewrite'] as $rule_id=>$rule ){
+
+			if( false === $rule['pass'] || false === strpos( $rule['content_type'], '_archive' ) ){
+				continue;
+			}
+
+			$post_type = substr( $rule['content_type'], 0, strlen( $rule['content_type'] ) - 8 );
+			$args = $post_types[ $post_type ];
+
+			// structs
+			$structure = array();
+
+			if( !empty( $rule['segment'] ) ){
+				foreach( $rule['segment'] as $segment ){
+
+					$structure[] = $segment['path'];
+				}
+			}
+			
+			$original_archive_slug = $args->has_archive === true ? $args->rewrite['slug'] : $args->has_archive;
+
+			$archive_slug = implode( '/', $structure );
+
+			if ( $args->rewrite['with_front'] ){
+				$archive_slug = substr( $wp_rewrite->front, 1 ) . $archive_slug;
+			}else{
+				$archive_slug = $wp_rewrite->root . $archive_slug;
+			}
+			
+			unset( $rewrites["{$original_archive_slug}/?$"] );
+			$rule_list["{$archive_slug}/?$"] = "index.php?post_type=$post_type";
+
+			add_rewrite_rule( "", "", 'top' );
+
+			if ( $args->rewrite['feeds'] && $wp_rewrite->feeds ) {
+				$feeds = '(' . trim( implode( '|', $wp_rewrite->feeds ) ) . ')';
+				unset( $rewrites["{$original_archive_slug}/feed/$feeds/?$"] );
+				unset( $rewrites["{$original_archive_slug}/$feeds/?$"] );
+
+				$rule_list["{$archive_slug}/feed/$feeds/?$"] = "index.php?post_type=$post_type" . '&feed=$matches[1]';
+				$rule_list["{$archive_slug}/$feeds/?$"] = "index.php?post_type=$post_type" . '&feed=$matches[1]';
+			}
+
+			if ( $args->rewrite['pages'] ){
+				unset( $rewrites["{$original_archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"] );
+				$rule_list["{$archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"] = "index.php?post_type=$post_type" . '&paged=$matches[1]';
+			}
+
+		}
+
+		$sync = array_reverse( $rewrites, true );
+		$rule_list = array_reverse( $rule_list, true );
+
+		$sync = array_merge( $sync, $rule_list );
+
+		$rewrites = array_reverse( $sync, true );
+
+		return $rewrites;
+	}	
+
 	/**
 	 * Return an instance of this class.
 	 *
@@ -210,6 +226,7 @@ class Caldera_URL_Builder {
 	public function define_rewrites( $test_config = false ){
 		
 		global $wp_rewrite;
+
 
 		// get built_in names
 		$built_in = get_post_types( array( '_builtin' => true ), 'names' );
@@ -295,13 +312,9 @@ class Caldera_URL_Builder {
 			}else{
 				// type
 				if( false !== strpos( $rule['content_type'], '_archive') ){
-					$type_parts = explode( '_archive', $rule['content_type'] );					
-					if( !isset( $wp_rewrite->extra_permastructs[ $rule['content_type'] ] ) ){
-						$wp_rewrite->extra_permastructs[ $rule['content_type'] ] = $wp_rewrite->extra_permastructs[ $type_parts[0] ];
-					}
-					$structure[] = '%post_name%';
-					add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+					// ignored - passed to later filter
 
+					$this->rule_structs[ $rule['content_type'] ] = implode( "/", $rule_list[$rule['content_type']] );
 				}else{
 				
 					$structure[] = '%' . $rule['content_type'] . '%';
@@ -315,7 +328,8 @@ class Caldera_URL_Builder {
 		if( is_array( $test_config ) ){
 			return $rule_list;
 		}
-		///var_dump($wp_rewrite);
+
+
 		$this->rebuild_flag( false );
 
 	}

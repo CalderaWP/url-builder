@@ -92,7 +92,7 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	 */
 	public function test_rules( $rebuilt = false ){
 		global $wp_rewrite;
-		
+
 		if( empty( $rebuilt ) ){
 			$config = json_decode( stripslashes_deep( $_POST['config'] ), true );
 			$config = $this->add_sanitization_and_validation( $config );
@@ -108,33 +108,37 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 		}
 
 		// fetch rules - (build mode not cached)
-		$rewrite = $wp_rewrite->rewrite_rules();
+		$rewrite = apply_filters( 'rewrite_rules_test_array', $wp_rewrite->rewrite_rules() );
 
 		foreach( $rules as $type=>$struct ){
 
 			// type
 			if( false !== strpos( $type, '_archive') ){
 				$type_part = explode('_archive', $type);
-				$type = $type_part[0];
 				$archive = true;
+
+				$url = $this->create_archive_permalink( null, $type_part[0] );
+
+			}else{
+
+				$posts = get_posts( array('post_type' => $type, 'posts_per_page' => 1 ) );
+				if( empty( $posts ) ){
+					$results[ $type ] = array( 'warning' => __( 'No posts to test.', 'caldera-url-builder' ) );
+					continue;
+				}
+
+				if( !empty( $struct[0] ) && false !== strpos( $struct[0], '_root_warning_' ) && empty( $rules['page'] ) ){
+					$results[ $type ][] = array('pagename' => true );
+					//continue;
+				}
+
+				$post = $posts[0];
+
+				// get a permalink for the first post found.
+				$url = $this->create_permalink( get_permalink( $post->ID ), $post->ID );
 			}
-
-			$posts = get_posts( array('post_type' => $type, 'posts_per_page' => 1 ) );
-			if( empty( $posts ) ){
-				$results[ $type ] = array( 'warning' => __( 'No posts to test.', 'caldera-url-builder' ) );
-				continue;
-			}
-
-			if( !empty( $struct[0] ) && false !== strpos( $struct[0], '_root_warning_' ) && empty( $rules['page'] ) ){
-				$results[ $type ][] = array('pagename' => true );
-				//continue;
-			}
-
-			$post = $posts[0];
-
-			// get a permalink for the first post found.
-			$url = $this->create_permalink( get_permalink( $post->ID ), $post->ID );
-
+			//var_dump( $url );
+			//die;
 			// Strip 'index.php/' if we're not using path info permalinks
 			if ( !$wp_rewrite->using_index_permalinks() ){
 				$url = str_replace( $wp_rewrite->index . '/', '', $url );
@@ -186,6 +190,7 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 
 					foreach ( (array) $query_vars as $key => $value ) {
 						if ( in_array( $key, $wp->public_query_vars ) ){
+
 							$query[$key] = $value;
 							if ( isset( $post_type_query_vars[$key] ) ) {
 								$query['post_type'] = $post_type_query_vars[$key];

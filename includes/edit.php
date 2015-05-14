@@ -38,12 +38,14 @@ $post_type_args = array(
 $post_types = get_post_types( $post_type_args, 'objects' );
 
 $caldera_url_builer['content_types'] = array();
+$caldera_url_builer['archives'] = array();
 
 foreach( $post_types as $post_type=>$post_object ){
 
 	$caldera_url_builer['content_types'][ $post_type ] = (array) $post_object->rewrite;
 	if( false !== $post_object->has_archive ){
 		$caldera_url_builer['content_types'][ $post_type . '_archive' ] = (array) $post_object->rewrite;
+		$caldera_url_builer['archives'][ $post_type . '_archive' ] = true;
 	}
 	// get taxos
 

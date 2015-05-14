@@ -28,6 +28,7 @@
 	<input type="hidden" value="caldera_url_builder" name="id" id="caldera_easy_rewrites-id">
 	<input type="hidden" value="{{_current_tab}}" name="_current_tab" id="caldera-url-builder-active-tab">
 	<input type="hidden" value="{{json content_types}}" name="content_types">
+	<input type="hidden" value="{{json archives}}" name="archives">
 
 		<div id="caldera-url-builder-panel-routes" class="caldera-url-builder-editor-panel" {{#is _current_tab value="#caldera-url-builder-panel-routes"}}{{else}} style="display:none;" {{/is}}>
 		<h4><?php _e('Rewrite Routes', 'caldera-url-builder') ; ?> <small class="description"><?php _e('Rules', 'caldera-url-builder') ; ?></small></h4>

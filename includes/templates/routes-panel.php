@@ -12,7 +12,7 @@
 	{{#if content_type}}
 		<input type="hidden" name="used_types[{{content_type}}]" value="{{content_type}}">
 		<input type="hidden" name="rewrite[{{_id}}][content_type]" value="{{content_type}}">
-		<span class="caldera-url-builder-segment-slug">{{content_type}}</span>
+		<span class="caldera-url-builder-segment-slug">{{#find @root/archives content_type}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-portfolio"></span>{{else}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-admin-post"></span>{{/find}} {{content_type}}</span>
 		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">:</span>
 		<input type="hidden" name="rewrite[{{_id}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}" data-format="key" data-sync="#preview-slug-{{_id}}" required>
 		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
@@ -81,8 +81,11 @@
 			{{#is type value="static"}}{{path}}{{/is}}</span>
 			<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
 		{{/each}}
+		{{#find @root/archives content_type}}
+			{{else}}
 			<span class="caldera-easy-rewrite-variable">&lcub;{{content_type}}_slug&rcub;</span>
 			<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
+		{{/find}}
 		</div>
 
 	{{else}}
