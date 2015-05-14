@@ -53,7 +53,7 @@ class Caldera_URL_Builder {
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		/// setup rewrite rules
-		//add_action( 'init', array( $this, 'define_rewrites' ), 100 );
+		add_action( 'init', array( $this, 'define_rewrites' ), 100 );
 
 		// Activate plugin when new blog is added
 		add_action( 'wpmu_new_blog', array( $this, 'activate_new_site' ) );
@@ -172,8 +172,7 @@ class Caldera_URL_Builder {
 
 		global $wp_rewrite;
 		$post = get_post( $post_id );
-
-		if( empty( $this->rule_structs[ $post->post_type ] ) ){
+		if( empty( $post ) || empty( $this->rule_structs[ $post->post_type ] ) ){
 			return $post_link;
 		}
 		
