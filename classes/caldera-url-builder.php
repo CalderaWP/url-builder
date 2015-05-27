@@ -102,7 +102,7 @@ class Caldera_URL_Builder {
 	public function create_permalink( $post_link, $post_id, $sample = false){
 
 		global $wp_rewrite;
-		if( is_object( $post_id ) ){
+		if( is_object( $post_id ) && isset( $post_id->term_id ) ){
 			return $post_link;
 		}
 		$post = get_post( $post_id );

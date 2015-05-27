@@ -34,6 +34,7 @@
 
 				{{#is type value="taxonomy"}}
 
+					
 
 					{{#find ../../../../content_types ../../content_type}}
 

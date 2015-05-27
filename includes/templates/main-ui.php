@@ -30,6 +30,7 @@
 	<input type="hidden" value="{{json content_types}}" name="content_types">
 	<input type="hidden" value="{{json archives}}" name="archives">
 	<input type="hidden" value="{{json taxonomies}}" name="taxonomies">	
+	<input type="hidden" value="{{json children}}" name="children">
 	<input type="hidden" value="{{json types}}" name="types">
 
 		<div id="caldera-url-builder-panel-routes" class="caldera-url-builder-editor-panel" {{#is _current_tab value="#caldera-url-builder-panel-routes"}}{{else}} style="display:none;" {{/is}}>

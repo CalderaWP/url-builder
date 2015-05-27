@@ -11,13 +11,13 @@ function cub_get_children( $term, $depth = 0 ){
 	$term->name = $prefix . $term->name;
 
 
-	$out_terms = array( $term );
+	$out_terms = array();
 	$terms = get_terms( $term->taxonomy, array( 'parent' => $term->term_id ) );
 	if( !empty( $terms ) ){
 		foreach( $terms as $term ){
 			$out_terms = array_merge( $out_terms, cub_get_children( $term, ($depth+1) ) );
 		}
-		//$out_terms = array_merge( $out_terms, $terms )
+		$out_terms = array_merge( $out_terms, $terms );
 	}
 	//var_dump( $terms );
 
@@ -40,6 +40,7 @@ $post_types = get_post_types( $post_type_args, 'objects' );
 $caldera_url_builer['content_types'] = array();
 $caldera_url_builer['archives'] = array();
 $caldera_url_builer['taxonomies'] = array();
+$caldera_url_builer['children'] = array();
 $caldera_url_builer['types'] = array(
 	'Post Type'	=> array(),
 	'Post Type Archive'	=> array(),
@@ -77,13 +78,17 @@ foreach( $post_types as $post_type=>$post_object ){
 
 			$terms = get_terms( $taxonomy->name, array( 'parent' => 0 ) );
 			if( !empty( $terms ) ){
-				$terms_sorted = array();
 				// parents only
-				foreach( $terms as  $term ){
-					$terms_sorted = array_merge( $terms_sorted, cub_get_children( $term ) );
+				foreach( $terms as $term ){
+					$child_terms = cub_get_children( $term );
+
+					if( !empty( $child_terms ) ){
+						$caldera_url_builer['children'][ $term->slug ] = $child_terms;
+					}
+					
 				}
 
-				$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonomy_name ]['terms'] = $terms_sorted;	
+				$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonomy_name ]['terms'] = $terms;
 			}
 
 			
