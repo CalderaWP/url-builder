@@ -11,18 +11,15 @@
 ?>
 <div id="caldera-url-builder-about">
 	<p>Thank you for purchasing Caldera URL Builder: the WordPress Visual Permalink Editor.</p>
-
+	<iframe width="100%" height="450" src="https://www.youtube.com/embed/tI-CJeGsONY?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
 
 	<h2>Get Support</h2>
 
-		<p>If you are a paying customer, and have activated your license, you can get support by emailing us at <a href="mailto:support@CalderaWP.com" title="Contact Support.">Support@CalderaWP.com</a>.</p>
+		<p>If you are a paying customer, and have activated your license, you can get support at <a href="https://calderawp.com/support/" title="Contact Support.">calderawp.com/suppor/</a>.</p>
 
-		<p>Documentation for this plugin is available at: <a href="https://calderawp.com/documentation/?product-slug=caldera-url-builder" target="_blank" title="Caldera URL Builder Docs">https://calderawp.com/documentation/?product-slug=caldera-url-builder</a></p>
+	<h2><a href="http://calderawp.com" title="CalderaWP">Learn More About CalderaWP</a></h2>
+		<p>At CalderaWP, we believe that for the developers, site owners, and the site’s end user a like, delivering an excellent user experience is what is most important. We provide easy to use plugins that make complex WordPress tasks easy.</p>
 
-	<h2>Learn More About CalderaWP</h2>
-		<p>CalderaWP offers WordPress plugins and training. We believe that for the developers, site owners, and the site’s end user a like, delivering an excellent user experience is what is most important. We provide easy to use plugins that make complex WordPress tasks easy.</p>
-
-		<p>Our products are WordPress plugins that are easy to use and give a great experience and WordPress training for beginner and advanced WordPress users a like. </p>
 
 	<!-- Begin MailChimp Signup Form -->
 	<link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
