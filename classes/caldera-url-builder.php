@@ -313,21 +313,23 @@ class Caldera_URL_Builder {
 
 					switch ( $segment['type'] ) {
 						case 'taxonomy':
-							//$structure[] = '%' . $segment['taxonomy'] . '%';
-							$structure[] = '%' . $segment_id . '%';
-							add_rewrite_tag( '%' . $segment_id . '%', '([^&^/]+)', $segment['taxonomy'] . '=' );
 
-							//$this->rule_structs[ $rule['content_type'] ][ $segment['taxonomy'] ] = $segment['default'];
-							//$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = $segment['default'];
-							$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = array(
-								'default' => $segment[ 'default' ],
-								'taxonomy' => $segment[ 'taxonomy' ],
-							);
-							
-							if( ( !empty( $test_config ) || true === $test_config ) && $first = true ){
-								$rule_list[ $rule['content_type'] ][] = '_root_warning_' . $segment['default'];
-							}else{
-								$rule_list[ $rule['content_type'] ][] = $segment['default'];
+							if ( isset( $segment[ 'default' ] ) ) {
+								$structure[] = '%' . $segment_id . '%';
+								add_rewrite_tag( '%' . $segment_id . '%', '([^&^/]+)', $segment['taxonomy'] . '=' );
+
+
+								$this->rule_structs[ $rule['content_type'] ][ $segment_id ] = array(
+									'default'  => $segment['default'],
+									'taxonomy' => $segment['taxonomy'],
+								);
+
+
+								if ( ( ! empty( $test_config ) || true === $test_config ) && $first = true ) {
+									$rule_list[ $rule['content_type'] ][] = '_root_warning_' . $segment['default'];
+								} else {
+									$rule_list[ $rule['content_type'] ][] = $segment['default'];
+								}
 							}
 							
 
