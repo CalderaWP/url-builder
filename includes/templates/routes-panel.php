@@ -12,10 +12,10 @@
 	{{#if content_type}}
 		<input type="hidden" name="used_types[{{content_type}}]" value="{{content_type}}">
 		<input type="hidden" name="rewrite[{{_id}}][content_type]" value="{{content_type}}">
-		<span class="caldera-url-builder-segment-slug">{{#find @root/archives content_type}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-portfolio"></span>{{else}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-admin-post"></span>{{/find}} {{content_type}}</span>
-		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">:</span>
+		<span class="caldera-url-builder-segment-slug">{{#find @root/archives content_type}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-portfolio"></span>{{else}}{{#find @root/taxonomies content_type}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-portfolio"></span>{{else}}<span style="color: rgb(143, 143, 143);" class="dashicons dashicons-admin-post"></span>{{/find}}{{/find}} {{content_type}}</span>
+		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);"></span>
 		<input type="hidden" name="rewrite[{{_id}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{content_type}}{{/if}}" data-format="key" data-sync="#preview-slug-{{_id}}" required>
-		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">/</span>
+		<span class="caldera-url-builder-segment" style="color: rgb(159, 159, 159);">=</span>
 		<span class="caldera-url-builder-segment-list">
 			{{#each segment}}
 			<span class="caldera-url-builder-rule-segment">
@@ -89,15 +89,20 @@
 		</div>
 
 	{{else}}
+
 		<input type="hidden" name="new_node" value="true">
 		<select class="caldera-easy-rewrite-new-rule-select required" data-live-sync="true" data-script="add-segment" name="rewrite[{{_id}}][content_type]" style="vertical-align: unset;">
 		<option></option>
-		{{#each ../../content_types}}
-			{{#find ../../../used_types @key}}
-			<option value="{{@key}}" disabled="disabled">{{@key}}</option>
-			{{else}}
-			<option value="{{@key}}" {{#is ../content_type value="@key"}}selected="selected"{{/is}}>{{@key}}</option>
-			{{/find}}
+		{{#each @root/types}}
+			<optgroup label="{{@key}}">
+				{{#each this}}
+					{{#find @root/used_types @key}}
+					<option value="{{@key}}" disabled="disabled">{{@key}}</option>
+					{{else}}
+					<option value="{{@key}}" {{#is @root/content_type value="@key"}}selected="selected"{{/is}}>{{this}}</option>
+					{{/find}}
+				{{/each}}
+			</optgroup>
 		{{/each}}
 		</select>
 	{{/if}}	

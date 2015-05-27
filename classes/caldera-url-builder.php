@@ -66,6 +66,7 @@ class Caldera_URL_Builder {
 		add_filter( 'post_link', array( $this, 'create_permalink' ), 1, 3 );
 		add_filter( 'attachment_link', array( $this, 'create_permalink' ), 10, 3 );
 		add_filter( 'post_type_archive_link', array( $this, 'create_archive_permalink' ), 10, 2 );
+		add_filter( 'term_link', array( $this, 'create_permalink' ), 10, 2 );
 
 		add_filter('rewrite_rules_array', array( $this, 'archive_rules_rewrite' ) );
 		add_filter('rewrite_rules_test_array', array( $this, 'archive_rules_rewrite' ) );
@@ -101,6 +102,9 @@ class Caldera_URL_Builder {
 	public function create_permalink( $post_link, $post_id, $sample = false){
 
 		global $wp_rewrite;
+		if( is_object( $post_id ) ){
+			return $post_link;
+		}
 		$post = get_post( $post_id );
 		if( empty( $post ) || empty( $this->rule_structs[ $post->post_type ] ) ){
 			return $post_link;
@@ -159,12 +163,10 @@ class Caldera_URL_Builder {
 		// start working on em.
 		foreach( $rules['rewrite'] as $rule_id=>$rule ){
 
-			if( false === $rule['pass'] || false === strpos( $rule['content_type'], '_archive' ) ){
-				continue;
-			}
 
-			$post_type = substr( $rule['content_type'], 0, strlen( $rule['content_type'] ) - 8 );
-			$args = $post_types[ $post_type ];
+			if( false === $rule['pass'] || false === strpos( $rule['content_type'], '_archive'  ) ){
+			continue;
+			}
 
 			// structs
 			$structure = array();
@@ -175,35 +177,81 @@ class Caldera_URL_Builder {
 					$structure[] = $segment['path'];
 				}
 			}
-			
-			$original_archive_slug = $args->has_archive === true ? $args->rewrite['slug'] : $args->has_archive;
 
-			$archive_slug = implode( '/', $structure );
+			if( false === strpos( $rule['content_type'], 'taxonomy_'  ) ){
 
-			if ( $args->rewrite['with_front'] ){
-				$archive_slug = substr( $wp_rewrite->front, 1 ) . $archive_slug;
+				$post_type = substr( $rule['content_type'], 0, strlen( $rule['content_type'] ) - 8 );
+				$args = $post_types[ $post_type ];
+				
+				$original_archive_slug = $args->has_archive === true ? $args->rewrite['slug'] : $args->has_archive;
+
+				$archive_slug = implode( '/', $structure );
+
+				if ( $args->rewrite['with_front'] ){
+					$archive_slug = substr( $wp_rewrite->front, 1 ) . $archive_slug;
+				}else{
+					$archive_slug = $wp_rewrite->root . $archive_slug;
+				}
+				
+				unset( $rewrites["{$original_archive_slug}/?$"] );
+				$rule_list["{$archive_slug}/?$"] = "index.php?post_type=$post_type";
+
+				add_rewrite_rule( "", "", 'top' );
+
+				if ( $args->rewrite['feeds'] && $wp_rewrite->feeds ) {
+					$feeds = '(' . trim( implode( '|', $wp_rewrite->feeds ) ) . ')';
+					unset( $rewrites["{$original_archive_slug}/feed/$feeds/?$"] );
+					unset( $rewrites["{$original_archive_slug}/$feeds/?$"] );
+
+					$rule_list["{$archive_slug}/feed/$feeds/?$"] = "index.php?post_type=$post_type" . '&feed=$matches[1]';
+					$rule_list["{$archive_slug}/$feeds/?$"] = "index.php?post_type=$post_type" . '&feed=$matches[1]';
+				}
+
+				if ( $args->rewrite['pages'] ){
+					unset( $rewrites["{$original_archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"] );
+					$rule_list["{$archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"] = "index.php?post_type=$post_type" . '&paged=$matches[1]';
+				}
+
 			}else{
-				$archive_slug = $wp_rewrite->root . $archive_slug;
+				
+				$taxonomy = str_replace( '_archive', '', str_replace( 'taxonomy_', '', $rule['content_type'] ) );
+				$args = get_taxonomy( $taxonomy );
+				$archive_slug = implode( '/', $structure );
+				/*$args['rewrite'] = wp_parse_args( $args['rewrite'], array(
+					'with_front' => true,
+					'hierarchical' => false,
+					'ep_mask' => EP_NONE,
+				) );*/
+				
+				
+				foreach( $rewrites as $rule_url=>$rewrite_rule ){
+					if( substr( $rule_url, 0, strlen( $taxonomy ) ) == $taxonomy ){
+
+						$rule_list[ $archive_slug . substr( $rule_url, strlen( $taxonomy ) ) ] = $rewrite_rule;
+						
+					}
+				}
+
+				$args->rewrite['slug'] = $archive_slug;
+
+				if ( $args->hierarchical && $args->rewrite['hierarchical'] )
+					$tag = '(.+?)';
+				else
+					$tag = '([^/]+)';
+
+				$link_url = $args->query_var ? "{$args->query_var}=" . '$matches[1]' : "taxonomy=$taxonomy";
+				
+				$rule_list["{$archive_slug}/{$tag}/?$"] = 'index.php?' . $link_url;
+				//add_rewrite_tag( "%$taxonomy%", $tag, $args['query_var'] ? "{$args['query_var']}=" : "taxonomy=$taxonomy&term=" );
+				//add_permastruct( $taxonomy, "{$args['rewrite']['slug']}/%$taxonomy%", $args['rewrite'] );
+
+
+				
+				//add_rewrite_tag( "%$taxonomy%", $tag, $args['query_var'] ? "{$args['query_var']}=" : "taxonomy=$taxonomy&term=" );
+				//add_permastruct( $taxonomy, "{$archive_slug}", $args->rewrite );
+
 			}
-			
-			unset( $rewrites["{$original_archive_slug}/?$"] );
-			$rule_list["{$archive_slug}/?$"] = "index.php?post_type=$post_type";
 
-			add_rewrite_rule( "", "", 'top' );
-
-			if ( $args->rewrite['feeds'] && $wp_rewrite->feeds ) {
-				$feeds = '(' . trim( implode( '|', $wp_rewrite->feeds ) ) . ')';
-				unset( $rewrites["{$original_archive_slug}/feed/$feeds/?$"] );
-				unset( $rewrites["{$original_archive_slug}/$feeds/?$"] );
-
-				$rule_list["{$archive_slug}/feed/$feeds/?$"] = "index.php?post_type=$post_type" . '&feed=$matches[1]';
-				$rule_list["{$archive_slug}/$feeds/?$"] = "index.php?post_type=$post_type" . '&feed=$matches[1]';
-			}
-
-			if ( $args->rewrite['pages'] ){
-				unset( $rewrites["{$original_archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"] );
-				$rule_list["{$archive_slug}/{$wp_rewrite->pagination_base}/([0-9]{1,})/?$"] = "index.php?post_type=$post_type" . '&paged=$matches[1]';
-			}
 
 		}
 
@@ -213,7 +261,7 @@ class Caldera_URL_Builder {
 		$sync = array_merge( $sync, $rule_list );
 
 		$rewrites = array_reverse( $sync, true );
-
+		
 		return $rewrites;
 	}	
 
@@ -313,8 +361,15 @@ class Caldera_URL_Builder {
 				// type
 				if( false !== strpos( $rule['content_type'], '_archive') ){
 					// ignored - passed to later filter
-
 					$this->rule_structs[ $rule['content_type'] ] = implode( "/", $rule_list[$rule['content_type']] );
+
+				}elseif( false !== strpos( $rule['content_type'], 'taxonomy_') ){
+					// taxo
+					$rule['content_type'] = str_replace( 'taxonomy_', '', $rule['content_type'] );
+					$structure[] = '%' . $rule['content_type'] . '%';
+					add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+
+					//$this->rule_structs[ $rule['content_type'] ] = implode( "/", $rule_list[$rule['content_type']] );
 				}else{
 				
 					$structure[] = '%' . $rule['content_type'] . '%';

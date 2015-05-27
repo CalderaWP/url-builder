@@ -118,6 +118,16 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 				$archive = true;
 
 				$url = $this->create_archive_permalink( null, $type_part[0] );
+			
+			}elseif( false !== strpos( $type, 'taxonomy_') ){
+				$type_part = explode('taxonomy_', $type);
+				$terms = get_terms( $type_part[1] );
+				if( empty( $terms ) ){
+					$results[ $type ] = array( 'warning' => __( 'No terms to test.', 'caldera-url-builder' ) );
+					continue;
+				}
+				$term = $terms[0];
+				$url = home_url() . implode('/', $struct) . '/' . $term->slug;
 
 			}else{
 
@@ -162,7 +172,6 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 			$request_match = $request;
 			foreach ( (array)$rewrite as $match => $query) {
 
-
 				// If the requesting file is the anchor of the match, prepend it
 				// to the path info.
 				if ( !empty($url) && ($url != $request) && (strpos($match, $url) === 0) )
@@ -186,28 +195,32 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 					// Filter out non-public query vars
 					global $wp;
 					parse_str( $query, $query_vars );
+
 					$query = array();
-
 					foreach ( (array) $query_vars as $key => $value ) {
-						if ( in_array( $key, $wp->public_query_vars ) ){
 
-							$query[$key] = $value;
-							if ( isset( $post_type_query_vars[$key] ) ) {
+						if ( in_array( $key, $wp->public_query_vars ) ){
+							//$query[$key] = $value;
+							if ( isset( $post_type_query_vars[$key] ) ) {								
 								$query['post_type'] = $post_type_query_vars[$key];
 								$query['name'] = $value;
+								break;
 							}
 						}
 					}
 
 					// Do the query
 					//$query = new WP_Query( $query );
-					$results[ $type ][] = $query;
+					if( !empty( $query ) ){
+						$results[ $type ][] = $query;
+					}
 
 				}
 			}
 
 		}
 
+		$wp_rewrite->flush_rules( false );
 		wp_send_json_success( $results );
 	}
 

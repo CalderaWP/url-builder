@@ -39,13 +39,21 @@ $post_types = get_post_types( $post_type_args, 'objects' );
 
 $caldera_url_builer['content_types'] = array();
 $caldera_url_builer['archives'] = array();
+$caldera_url_builer['taxonomies'] = array();
+$caldera_url_builer['types'] = array(
+	'Post Type'	=> array(),
+	'Post Type Archive'	=> array(),
+	'Taxonomy'	=> array(),
+);	
 
 foreach( $post_types as $post_type=>$post_object ){
 
 	$caldera_url_builer['content_types'][ $post_type ] = (array) $post_object->rewrite;
+	$caldera_url_builer['types']['Post Type'][ $post_type ] = $post_type;
 	if( false !== $post_object->has_archive ){
 		$caldera_url_builer['content_types'][ $post_type . '_archive' ] = (array) $post_object->rewrite;
 		$caldera_url_builer['archives'][ $post_type . '_archive' ] = true;
+		$caldera_url_builer['types']['Post Type Archive'][ $post_type . '_archive' ] = $post_type . '_archive';
 	}
 	// get taxos
 
@@ -53,8 +61,14 @@ foreach( $post_types as $post_type=>$post_object ){
 	if( !empty( $taxonomies ) ){
 		foreach ( $taxonomies as $taxonomy_name  ) {
 
+			$caldera_url_builer['types']['Taxonomy'][ 'taxonomy_' . $taxonomy_name ] = $taxonomy_name;
+			$caldera_url_builer['taxonomies']['taxonomy_' . $taxonomy_name] = true;
 			$taxonomy = get_taxonomy( $taxonomy_name );
-
+			$caldera_url_builer['content_types']['taxonomy_' . $taxonomy_name ] = array(
+				'name'	=>	$taxonomy->name,
+				'label'	=>	$taxonomy->label,
+				'terms'	=>	array()
+			);
 			$caldera_url_builer['content_types'][ $post_type ]['taxonomies'][ $taxonomy_name ] = array(
 				'name'	=>	$taxonomy->name,
 				'label'	=>	$taxonomy->label,
