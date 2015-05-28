@@ -54,7 +54,7 @@
 {{#unless _current_tab}}
 	{{#script}}
 		jQuery(function($){
-			$('.caldera-url-builder-nav-tab').first().trigger('click');
+			$('.caldera-url-builder-nav-tab').first().find('a').trigger('click');
 		});
 	{{/script}}
 {{/unless}}
