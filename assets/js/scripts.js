@@ -27,7 +27,7 @@ jQuery( function($){
 		notice.stop().animate({top: -5}, 200, function(){
 			setTimeout( function(){
 				notice.stop().animate({top: -75}, 200);
-			}, 2000);
+			}, 8000);
 		});
 
 	}
