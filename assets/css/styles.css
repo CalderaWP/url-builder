@@ -17,6 +17,9 @@ h4 > small.description {
   padding: 0 0 8px 22px;
   overflow: hidden;
 }
+.caldera-url-builder-main-headercaldera .error{
+  clear: both;
+}
 .caldera-url-builder-sub-headercaldera {
   background: none repeat scroll 0 0 #f8f8f8;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 8px 0 0 #444 inset;

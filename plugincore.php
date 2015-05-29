@@ -24,8 +24,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define('CUB_PATH',  plugin_dir_path( __FILE__ ) );
-define('CUB_URL',  plugin_dir_url( __FILE__ ) );
+define( 'CUB_PATH',  plugin_dir_path( __FILE__ ) );
+define( 'CUB_CORE',  __FILE__ );
+define( 'CUB_URL',  plugin_dir_url( __FILE__ ) );
 define( 'CUB_VER', '1.0.1' );
 
 // load dependancies
@@ -57,3 +58,5 @@ function caldera_url_builder_deactivate() {
 	flush_rewrite_rules();
 
 }
+
+
