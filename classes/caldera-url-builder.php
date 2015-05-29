@@ -435,9 +435,10 @@ class Caldera_URL_Builder {
 
 					//$this->rule_structs[ $rule['content_type'] ] = implode( "/", $rule_list[$rule['content_type']] );
 				}else{
-				
-					$structure[] = '%' . $rule['content_type'] . '%';
-					add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+					if( isset( $wp_rewrite->extra_permastructs[ $rule['content_type'] ] ) ){
+						$structure[] = '%' . $rule['content_type'] . '%';
+						add_permastruct( $rule['content_type'], implode( '/', $structure ), $wp_rewrite->extra_permastructs[ $rule['content_type'] ] );
+					}
 				}
 	
 			}
