@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                     '!phpunit.xml',
                     '!tests/**'
                 ],
-                dest: 'build/'
+                dest: 'build/<%= pkg.name %>/'
             }
         },
         compress: {
