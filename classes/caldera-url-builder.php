@@ -77,63 +77,21 @@ class Caldera_URL_Builder {
 		/**
 		 * Software Licensing
 		 */
+		/**
+		 * Software Licensing
+		 */
 		add_action( 'admin_init', function( ) {
+			$plugin = array(
+				'name'		=>	'Caldera URL Builder',
+				'slug'		=>	'caldera-url-builder',
+				'url'		=>	'https://calderawp.com/downloads/caldera-url-builder/',
+				'version'	=>	CUB_VER,
+				'key_store'	=>  'cub_license',
+				'file'		=>  CUB_CORE
+			);
 
-			// check if licence manager is installed
-			if( !class_exists( 'CalderaWP_License_Manager' ) && empty( $_GET['action'] ) ){
-				$plugins = get_plugins();
-				$found = false;
-				foreach( $plugins as $plugin_file=>$plugin ){
-					if( $plugin['Name'] == 'CalderaWP License Manager' ){
-						$found = $plugin_file;
-						break;
-					}
-				}
-				// oi! need manager		
-				if ( is_admin() ) {
-					//BIG nope nope nope!
-					if( !class_exists( 'Caldera_Warnings_Dismissible_Notice' ) ){
-						include_once CUB_PATH . 'vendor/calderawp/dismissible-notice/src/Caldera_Warnings_Dismissible_Notice.php';;
-					}
-					if( !empty( $found ) ){
-						// installed but not active
-						$message = __( sprintf( 'Caldera URL Builder requires CalderaWP License Manager to be active. <a href="%1s">Activate Now</a>', wp_nonce_url( self_admin_url( 'plugins.php?action=activate&plugin=' . urlencode( $found ) ), 'activate-plugin_' . $found ) ), 'metabox-organizer' );
-						echo Caldera_Warnings_Dismissible_Notice::notice( $message, true, 'activate_plugins' );
-						return;
-					}else{
-						// not installed installed
-						$message = __( sprintf( 'Caldera URL Builder requires CalderaWP License Manager. <a href="%1s">Install Now</a>', wp_nonce_url( self_admin_url( 'update.php?action=install-plugin&plugin=calderawp-license-manager' ), 'install-plugin_calderawp-license-manager' ) ), 'metabox-organizer' );
-						echo Caldera_Warnings_Dismissible_Notice::notice( $message, true, 'activate_plugins' );
+			new \calderawp\licensing_helper\licensing( $plugin );
 
-					}
-					
-				}
-			}
-
-			if( function_exists( 'cwp_license_manager_register_licensed_product' ) ){
-				
-				$product_params = array(
-					'name'		=>	'Caldera URL Builder',
-					'slug'		=>	'caldera-url-builder',
-					'url'		=>	'https://calderawp.com',
-					'type'		=>	'plugin',
-					'updater'	=>	'edd',
-					'version'	=>	CUB_VER,
-					'key_store'	=>  'cub_license',
-					'file'		=>  CUB_CORE
-				);
-
-				cwp_license_manager_register_licensed_product( $product_params );
-				if( ! cwp_license_manager_is_product_licensed( $product_params['name'] ) && ( empty( $_GET['page'] ) || $_GET['page'] !== 'calderawp_license_manager' ) ){
-					// notice to activate licnse 
-					if( !class_exists( 'Caldera_Warnings_Dismissible_Notice' ) ){
-						include_once CUB_PATH . 'vendor/calderawp/dismissible-notice/src/Caldera_Warnings_Dismissible_Notice.php';
-					}
-					$message = __( sprintf( 'Please Activate Caldera URL Builder by adding your license key in <a href="%1s">CalderaWP License Manager</a>.', self_admin_url( 'options-general.php?page=calderawp_license_manager' ) ) );
-					echo Caldera_Warnings_Dismissible_Notice::notice( $message, true, 'activate_plugins' );
-
-				}
-			}
 		}, 0 );
 		
 	}
