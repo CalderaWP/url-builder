@@ -10,7 +10,7 @@
  * Plugin Name: Caldera URL Builder
  * Plugin URI:  http://CalderaWP.com/downlaods/caldera-url-builder
  * Description: The visual editor for WordPress permalinks.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author:      David Cramer for CalderaWP <david@calderaWP.com>
  * Author URI:  http://calderawp.com/
  * Text Domain: caldera-url-builder
@@ -27,7 +27,7 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'CUB_PATH',  plugin_dir_path( __FILE__ ) );
 define( 'CUB_CORE',  __FILE__ );
 define( 'CUB_URL',  plugin_dir_url( __FILE__ ) );
-define( 'CUB_VER', '1.1.0' );
+define( 'CUB_VER', '1.1.1' );
 
 // load dependancies
 include_once( CUB_PATH . 'vendor/autoload.php' );
