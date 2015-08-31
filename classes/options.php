@@ -34,21 +34,27 @@ class Caldera_URL_Builder_Options {
 	 * @param string $option The name of a specific option to get.
 	 * @param mixed $default Optional. Default to return if no value found. Default is false.
 	 *
-	 * @return string|null|array Returns the option or null if it doesn't exist
+	 * @return string|null|array|string Returns the option or null if it doesn't exist or false if not allowed.
 	 */
 	public static function get ( $option, $default = false ) {
-		$option = self::get_options( $option );
-		if ( is_array( $option ) && empty( $option ) ) {
-			return null;
+		$can = self::can();
+		if( $can ){
+			$option = self::get_options( $option );
+			if ( is_array( $option ) && empty( $option ) ) {
+				return null;
 
+			}
+
+			if ( is_null( $option ) ) {
+				return $default;
+
+			}
+
+			return $option;
+		} else {
+
+			return $can;
 		}
-
-		if ( is_null( $option ) ) {
-			return $default;
-
-		}
-
-		return $option;
 
 	}
 
@@ -57,10 +63,17 @@ class Caldera_URL_Builder_Options {
 	 *
 	 * @since 0.0.1
 	 *
-	 * @return null|array Returns the options or null if none are set
+	 * @return null|array|bool Returns the options or null if none are set or false if not allowed.
 	 */
 	public static function get_all ( ) {
-		return self::get_options( null );
+		$can = self::can();
+		if( $can ){
+			return self::get_options( null );
+
+		} else {
+			return $can;
+
+		}
 
 	}
 
@@ -101,9 +114,18 @@ class Caldera_URL_Builder_Options {
 	 * Clear this plugin's saved config.
 	 *
 	 * @since 0.2.0
+	 *
+	 * @return bool
 	 */
 	public static function clear() {
-		delete_option( self::$option_name );
+		$can = self::can();
+		if( $can ){
+			return delete_option( self::$option_name );
+
+		}else{
+			return $can;
+
+		}
 
 	}
 
@@ -113,9 +135,31 @@ class Caldera_URL_Builder_Options {
 	 * @since 0.2.0
 	 *
 	 * @param array $config The configuration to save.
+	 *
+	 * @return bool
 	 */
 	public static function save( $config ) {
-		update_option( self::$option_name, $config );
+		$can = self::can();
+		if( $can ){
+			return update_option( self::$option_name, $config );
+		}else{
+			return $can;
+
+		}
+
+	}
+
+	/**
+	 * Generic capability check to use before reading/writing
+	 *
+	 * @since 1.1.2
+	 *
+	 * @param string $cap Optional. Capability to check. Defaults to 'manage_options'
+	 *
+	 * @return bool
+	 */
+	public static function can( $cap = 'manage_options' ) {
+		return current_user_can( $cap );
 
 	}
 

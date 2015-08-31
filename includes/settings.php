@@ -50,6 +50,13 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	 * @since 0.0.1
 	 */
 	public function get_config_license(){
+		$can = Caldera_URL_Builder_Options::can();
+		if ( ! $can ) {
+			status_header( 500 );
+			wp_die( __( 'Access denied', 'caldera-url-builder' ) );
+		}
+
+
 		global $cub_licensing_output;
 
 		$license = $cub_licensing_output->get_license_code();
@@ -74,6 +81,12 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	 * @since 0.0.1
 	 */
 	public function rebuild_rules(){
+		$can = Caldera_URL_Builder_Options::can();
+		if ( ! $can ) {
+			status_header( 500 );
+			wp_die( __( 'Access denied', 'caldera-url-builder' ) );
+		}
+
 		global $wp_rewrite;
 
 		flush_rewrite_rules();
@@ -91,6 +104,12 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	 * @param bool $rebuilt Have rules been rebuilt already?
 	 */
 	public function test_rules( $rebuilt = false ){
+		$can = Caldera_URL_Builder_Options::can();
+		if ( ! $can ) {
+			status_header( 500 );
+			wp_die( __( 'Access denied', 'caldera-url-builder' ) );
+		}
+
 		global $wp_rewrite;
 
 		if( empty( $rebuilt ) ){
@@ -232,6 +251,11 @@ class Settings_Caldera_URL_Builder extends Caldera_URL_Builder{
 	 * @since 0.0.1
 	 */
 	public function save_config(){
+		$can = Caldera_URL_Builder_Options::can();
+		if ( ! $can ) {
+			status_header( 500 );
+			wp_die( __( 'Access denied', 'caldera-url-builder' ) );
+		}
 
 		if( empty( $_POST['caldera-url-builder-setup'] ) || !wp_verify_nonce( $_POST['caldera-url-builder-setup'], 'caldera-url-builder' ) ){
 			if( empty( $_POST['config'] ) ){
